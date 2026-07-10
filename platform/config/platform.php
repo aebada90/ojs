@@ -1,0 +1,41 @@
+<?php
+
+return [
+  'name' => env('PLATFORM_NAME', 'Oktoberfest AI'),
+  'tagline' => env('PLATFORM_TAGLINE', 'The Ultimate AI-Powered Tourism & Festival Ecosystem'),
+  'default_locale' => env('PLATFORM_DEFAULT_LOCALE', 'en'),
+  'default_currency' => env('PLATFORM_DEFAULT_CURRENCY', 'EUR'),
+  'default_timezone' => env('PLATFORM_DEFAULT_TIMEZONE', 'Europe/Berlin'),
+  'default_city' => env('PLATFORM_DEFAULT_CITY', 'Munich'),
+  'commission_rate' => (float) env('PLATFORM_COMMISSION_RATE', 10.0),
+  'white_label' => (bool) env('PLATFORM_WHITE_LABEL', false),
+  'seo' => [
+    'title_suffix' => ' | '.env('PLATFORM_NAME', 'Oktoberfest AI'),
+    'default_description' => 'Discover, book, buy, sell, and rent — hotels, events, experiences, marketplace, and more. Powered by AI.',
+    'twitter_handle' => env('PLATFORM_TWITTER', '@oktoberfestai'),
+  ],
+  'hosting' => [
+    'queue_connection' => env('QUEUE_CONNECTION', 'database'),
+    'cache_store' => env('CACHE_STORE', 'database'),
+    'session_driver' => env('SESSION_DRIVER', 'database'),
+    'filesystem_disk' => env('FILESYSTEM_DISK', 'local'),
+  ],
+  'roles' => [
+    'guest',
+    'customer',
+    'vendor',
+    'hotel',
+    'restaurant',
+    'property_owner',
+    'rental_provider',
+    'service_provider',
+    'employer',
+    'job_seeker',
+    'event_organizer',
+    'influencer',
+    'corporate',
+    'moderator',
+    'admin',
+    'super_admin',
+  ],
+];

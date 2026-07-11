@@ -2,30 +2,62 @@
 
 This repository contains the **Oktoberfest AI / EventOS / TourismOS** platform scaffold.
 
-The Laravel application lives in the [`platform/`](platform/) directory.
+The Laravel application lives in the [`platform/`](platform/) directory — same setup pattern as [`ai-journal`](https://github.com/aebada90/ojs/tree/cursor/ai-journal-laravel-5b63/ai-journal) on branch `cursor/ai-journal-laravel-5b63`.
 
-> **Important:** The repo root is the legacy **OJS** project.  
-> If you open `localhost:8000` from the repo root, you will see OJS — **not** Oktoberfest.
+> **Important:** The repo root is the legacy **OJS** project. Run Oktoberfest from `platform/`, not the repo root.
 
-## Getting Started (Oktoberfest website)
+## Requirements
+
+- PHP 8.2+
+- Composer
+- Node.js 18+
+- SQLite (default) or MySQL
+
+## Installation
 
 ```bash
-# Option 1 — use the start script (recommended)
-./start-oktoberfest.sh
-# Then open: http://127.0.0.1:8888
-
-# Option 2 — manual
 cd platform
 composer install
-cp .env.example .env
+cp .env.example .env   # if needed
 php artisan key:generate
+touch database/database.sqlite   # if using SQLite
 php artisan migrate --seed
 npm install && npm run build
-php artisan serve --host=127.0.0.1 --port=8888
+php artisan serve
 ```
 
-**Oktoberfest website URL:** http://127.0.0.1:8888
+Or use the composer shortcut (same as ai-journal):
 
-See [platform/README.md](platform/README.md) for full architecture, Hostinger deployment, and module documentation.
+```bash
+cd platform
+composer run setup
+php artisan serve
+```
 
-> **Note:** The repository root also contains the legacy OJS codebase. The new platform is self-contained under `platform/`.
+Visit **http://localhost:8000**
+
+**Demo accounts** (after seeding):
+
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | admin@oktoberfest.ai | password |
+| Vendor | vendor@oktoberfest.ai | password |
+
+## Quick start script
+
+From the repo root:
+
+```bash
+./start-oktoberfest.sh
+```
+
+This runs the same steps above and starts the server on port 8000.
+
+## Development (with Vite hot reload)
+
+```bash
+cd platform
+composer run dev
+```
+
+See [platform/README.md](platform/README.md) for architecture, Hostinger deployment, and module documentation.

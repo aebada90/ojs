@@ -46,15 +46,28 @@ Each module can be toggled in `config/modules.php`.
 
 ## Quick Start (Local)
 
+Same setup as the **ai-journal** model project in this repo:
+
 ```bash
 cd platform
 composer install
-cp .env.example .env
+cp .env.example .env   # if needed
 php artisan key:generate
+touch database/database.sqlite   # if using SQLite
 php artisan migrate --seed
 npm install && npm run build
 php artisan serve
 ```
+
+Or:
+
+```bash
+cd platform
+composer run setup
+php artisan serve
+```
+
+Visit **http://localhost:8000**
 
 **Demo accounts** (after seeding):
 

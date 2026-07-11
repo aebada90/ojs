@@ -14,6 +14,8 @@ class UniversalSearch extends Component
 
     public string $city = '';
 
+    public string $variant = 'hero';
+
     public function search(): void
     {
         $this->redirectRoute('search.results', [
@@ -46,18 +48,12 @@ class UniversalSearch extends Component
     {
         return view('search::livewire.universal-search', [
             'suggestions' => $this->suggestions(),
-            'types' => [
-                'all' => 'Everything',
-                'hotel' => 'Hotels',
-                'rental' => 'Rentals',
-                'product' => 'Products',
-                'event' => 'Events',
-                'property' => 'Properties',
-                'restaurant' => 'Restaurants',
-                'experience' => 'Experiences',
-                'service' => 'Services',
-                'job' => 'Jobs',
-            ],
+            'types' => collect([
+                'all', 'hotel', 'rental', 'product', 'event',
+                'property', 'restaurant', 'experience', 'service', 'job',
+            ])->mapWithKeys(fn (string $type) => [
+                $type => __("platform.types.{$type}"),
+            ])->all(),
         ]);
     }
 }

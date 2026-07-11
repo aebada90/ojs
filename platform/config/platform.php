@@ -7,6 +7,11 @@ return [
   'default_currency' => env('PLATFORM_DEFAULT_CURRENCY', 'EUR'),
   'default_timezone' => env('PLATFORM_DEFAULT_TIMEZONE', 'Europe/Berlin'),
   'default_city' => env('PLATFORM_DEFAULT_CITY', 'Munich'),
+  'locales' => ['en', 'de'],
+  'locale_names' => [
+    'en' => 'English',
+    'de' => 'Deutsch',
+  ],
   'commission_rate' => (float) env('PLATFORM_COMMISSION_RATE', 10.0),
   'white_label' => (bool) env('PLATFORM_WHITE_LABEL', false),
   'seo' => [

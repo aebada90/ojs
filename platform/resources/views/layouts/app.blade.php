@@ -34,6 +34,8 @@
 
     @include('layouts.partials.footer')
 
+    <livewire:ai.chatbot />
+
     @livewireScripts
     @stack('scripts')
 </body>

@@ -10,4 +10,8 @@ return [
     'provider' => env('AI_PROVIDER', 'openai'),
     'api_key' => env('AI_API_KEY'),
     'model' => env('AI_MODEL', 'gpt-4o-mini'),
+    'chatbot' => [
+        'enabled' => env('AI_CHATBOT_ENABLED', true),
+        'persist_sessions' => env('AI_CHATBOT_PERSIST', true),
+    ],
 ];

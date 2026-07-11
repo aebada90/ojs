@@ -128,8 +128,50 @@ Then run `php artisan config:clear`.
 REST API base: `/api/v1/`
 
 - `GET /api/v1/health` — platform health & enabled modules
+- `GET /api/v1/ai/status` — AI provider status
+- `POST /api/v1/ai/chat` — chatbot API (`message`, optional `session_id`)
+- `GET /api/v1/ai/history/{sessionId}` — conversation history
 - Module routes: `/api/v1/{module}/...`
 - Authenticated: `Authorization: Bearer {sanctum_token}`
+
+## AI Chatbot & External APIs
+
+The floating chatbot (bottom-right on every page) supports multiple AI backends with automatic fallback.
+
+### Built-in providers
+- **OpenAI** — set `AI_PROVIDER=openai` and `AI_API_KEY`
+- **Anthropic** — set `AI_PROVIDER=anthropic` and `AI_ANTHROPIC_API_KEY`
+
+### Connect APIs from your other projects
+
+Set `AI_PROVIDER` to one of: `external`, `tourism_os`, `eventos`, `marketplace_ai`
+
+Example — connect your TourismOS API:
+
+```env
+AI_PROVIDER=tourism_os
+AI_TOURISM_OS_ENABLED=true
+AI_TOURISM_OS_URL=https://api.your-tourism-project.com
+AI_TOURISM_OS_API_KEY=your-api-key
+AI_TOURISM_OS_CHAT_ENDPOINT=/api/ai/chat
+AI_TOURISM_OS_RESPONSE_KEY=message
+```
+
+Example — generic external API:
+
+```env
+AI_PROVIDER=external
+AI_EXTERNAL_ENABLED=true
+AI_EXTERNAL_BASE_URL=https://api.your-project.com
+AI_EXTERNAL_CHAT_ENDPOINT=/api/v1/chat
+AI_EXTERNAL_API_KEY=your-key
+AI_EXTERNAL_RESPONSE_KEY=reply
+AI_FALLBACK_CHAIN=external,openai
+```
+
+The external provider sends `{ message, messages, conversation, context }` and reads the response from your configured key (`reply`, `message`, `response`, etc.).
+
+See `config/ai-providers.php` to add more project APIs.
 
 ## White-label / Multi-city
 

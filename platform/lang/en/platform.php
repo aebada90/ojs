@@ -156,4 +156,18 @@ return [
         'home_title' => 'AI-Powered Tourism & Festival Platform',
         'description' => 'Discover, book, buy, sell, and rent — hotels, events, experiences, marketplace, and more. Powered by AI.',
     ],
+
+    'chatbot' => [
+        'title' => 'Oktoberfest AI Assistant',
+        'online' => 'Online',
+        'open' => 'Open chat',
+        'clear' => 'Clear chat',
+        'welcome' => 'Welcome! How can I help?',
+        'welcome_hint' => 'Ask about hotels, events, rentals, restaurants, or plan your Munich trip.',
+        'placeholder' => 'Type your message...',
+        'quick_hotels' => 'Find hotels near Wiesn',
+        'quick_events' => 'Oktoberfest events & tickets',
+        'quick_rentals' => 'Rent traditional outfits',
+        'quick_restaurants' => 'Best beer gardens',
+    ],
 ];

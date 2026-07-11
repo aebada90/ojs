@@ -156,4 +156,18 @@ return [
         'home_title' => 'KI-gestützte Tourismus- & Festival-Plattform',
         'description' => 'Entdecken, buchen, kaufen, verkaufen und mieten — Hotels, Events, Erlebnisse, Marktplatz und mehr. Mit KI.',
     ],
+
+    'chatbot' => [
+        'title' => 'Oktoberfest KI-Assistent',
+        'online' => 'Online',
+        'open' => 'Chat öffnen',
+        'clear' => 'Chat löschen',
+        'welcome' => 'Willkommen! Wie kann ich helfen?',
+        'welcome_hint' => 'Frag nach Hotels, Events, Vermietungen, Restaurants oder plane deine München-Reise.',
+        'placeholder' => 'Nachricht eingeben...',
+        'quick_hotels' => 'Hotels nahe Wiesn finden',
+        'quick_events' => 'Oktoberfest Events & Tickets',
+        'quick_rentals' => 'Tracht mieten',
+        'quick_restaurants' => 'Beste Biergärten',
+    ],
 ];

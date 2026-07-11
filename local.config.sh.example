@@ -1,0 +1,20 @@
+# Copy to local.config.sh and set paths to match your other projects on this Mac.
+# local.config.sh is gitignored — your paths stay private.
+
+# Example: Laravel Herd (uses same PHP as your other Herd sites)
+# export OKTOBERFEST_PHP="$HOME/Library/Application Support/Herd/bin/php"
+
+# Example: MAMP
+# export OKTOBERFEST_PHP="/Applications/MAMP/bin/php/php8.3.14/bin/php"
+
+# Example: Homebrew
+# export OKTOBERFEST_PHP="/opt/homebrew/bin/php"
+
+# Example: Custom composer
+# export OKTOBERFEST_COMPOSER="composer"
+
+# Optional: install folder (default ~/oktoberfest-ai)
+# export OKTOBERFEST_DIR="$HOME/Sites/oktoberfest-ai"
+
+# Optional: port
+# export OKTOBERFEST_PORT=8888

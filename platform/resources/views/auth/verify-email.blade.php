@@ -5,7 +5,7 @@
 @section('content')
 <div class="mx-auto max-w-md px-4 py-16 text-center">
     <div class="rounded-3xl border border-stone-200 bg-white p-8 shadow-xl">
-        <h1 class="font-display text-2xl font-bold text-oktober-navy">{{ __('platform.verify.title') }}</h1>
+        <h1 class="font-display text-2xl font-bold text-bavarian-800">{{ __('platform.verify.title') }}</h1>
         <p class="mt-4 text-sm text-stone-600">
             {{ __('platform.verify.body') }}
         </p>
@@ -14,7 +14,11 @@
             <p class="mt-2 text-sm font-medium text-stone-800">{{ auth()->user()->email }}</p>
         @endauth
 
-        @if (session('status') === 'verification-link-sent')
+        @if (session('verification_mail_failed'))
+            <div class="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800" role="alert">
+                {{ __('platform.verify.send_failed') }}
+            </div>
+        @elseif (session('status') === 'verification-link-sent')
             <div class="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800" role="status">
                 {{ __('platform.verify.sent') }}
             </div>
@@ -23,6 +27,17 @@
         @if ($errors->any())
             <div class="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800" role="alert">
                 {{ $errors->first() }}
+            </div>
+        @endif
+
+        @if (session('verification_inline_url'))
+            <div class="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-4 text-sm text-amber-950">
+                <p class="font-medium">{{ __('platform.verify.inline_title') }}</p>
+                <p class="mt-1 text-xs text-amber-800">{{ __('platform.verify.inline_hint') }}</p>
+                <a href="{{ session('verification_inline_url') }}"
+                   class="mt-4 inline-flex w-full items-center justify-center rounded-xl bg-bavarian-700 px-6 py-3 text-sm font-semibold text-white transition hover:bg-bavarian-600">
+                    {{ __('platform.verify.inline_action') }}
+                </a>
             </div>
         @endif
 
@@ -35,12 +50,14 @@
             </button>
         </form>
 
-        <form method="POST" action="{{ route('logout') }}" class="mt-3">
-            @csrf
-            <button type="submit" class="text-sm text-stone-500 underline underline-offset-2 hover:text-stone-800">
-                {{ __('platform.verify.logout') }}
-            </button>
-        </form>
+        @if (Route::has('logout'))
+            <form method="POST" action="{{ route('logout') }}" class="mt-3">
+                @csrf
+                <button type="submit" class="text-sm text-stone-500 underline underline-offset-2 hover:text-stone-800">
+                    {{ __('platform.verify.logout') }}
+                </button>
+            </form>
+        @endif
     </div>
 </div>
 @endsection

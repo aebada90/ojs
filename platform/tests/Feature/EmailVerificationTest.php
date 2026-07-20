@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use App\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
@@ -43,7 +44,31 @@ class EmailVerificationTest extends TestCase
             ->post(route('verification.send'))
             ->assertRedirect();
 
-        Notification::assertSentTo($user, \App\Notifications\VerifyEmail::class);
+        Notification::assertSentTo($user, VerifyEmail::class);
+    }
+
+    public function test_mail_failure_flashes_inline_verify_link_instead_of_500(): void
+    {
+        $user = User::factory()->unverified()->create();
+
+        // Point SMTP at a closed port so the real mailer throws.
+        config([
+            'mail.default' => 'smtp',
+            'mail.mailers.smtp.transport' => 'smtp',
+            'mail.mailers.smtp.host' => '127.0.0.1',
+            'mail.mailers.smtp.port' => 9,
+            'mail.mailers.smtp.timeout' => 1,
+            'mail.from.address' => 'noreply@oktoberfest.ai',
+            'mail.from.name' => 'Oktoberfest',
+            'platform.verify_inline_fallback' => false,
+        ]);
+
+        $this->actingAs($user)
+            ->from(route('verification.notice'))
+            ->post(route('verification.send'))
+            ->assertRedirect()
+            ->assertSessionHas('verification_inline_url')
+            ->assertSessionHas('verification_mail_failed');
     }
 
     public function test_users_verify_command_marks_email_verified(): void

@@ -62,9 +62,30 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
+    /**
+     * Send the email verification notification.
+     *
+     * Hostinger SMTP misconfig must never become HTTP 500 on Resend/Register.
+     * On failure we flash an on-page signed verify link instead.
+     */
     public function sendEmailVerificationNotification(): void
     {
-        $this->notify(new VerifyEmail);
+        $inlineUrl = VerifyEmail::signedUrl($this);
+
+        try {
+            $this->notify(new VerifyEmail);
+        } catch (\Throwable $e) {
+            report($e);
+
+            session()->flash('verification_mail_failed', true);
+            session()->flash('verification_inline_url', $inlineUrl);
+
+            return;
+        }
+
+        if (config('platform.verify_inline_fallback')) {
+            session()->flash('verification_inline_url', $inlineUrl);
+        }
     }
 
     public function vendor(): HasOne

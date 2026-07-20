@@ -14,6 +14,8 @@ return [
   ],
   'commission_rate' => (float) env('PLATFORM_COMMISSION_RATE', 10.0),
   'white_label' => (bool) env('PLATFORM_WHITE_LABEL', false),
+  // When true, always show an on-page verify button (useful until Hostinger SMTP works).
+  'verify_inline_fallback' => (bool) env('VERIFY_EMAIL_INLINE', true),
   'seo' => [
     'title_suffix' => ' | '.env('PLATFORM_NAME', 'Oktoberfest AI'),
     'default_description' => 'Discover, book, buy, sell, and rent — hotels, events, experiences, marketplace, and more. Powered by AI.',

@@ -16,16 +16,21 @@ class VerifyEmail extends BaseVerifyEmail
 {
     public function toMail($notifiable): MailMessage
     {
-        $locale = $notifiable->locale ?? app()->getLocale();
+        $locale = is_object($notifiable) && isset($notifiable->locale) && $notifiable->locale
+            ? $notifiable->locale
+            : app()->getLocale();
 
         return (new MailMessage)
             ->subject(__('platform.verify.mail_subject', [], $locale))
             ->line(__('platform.verify.mail_line', [], $locale))
-            ->action(__('platform.verify.mail_action', [], $locale), $this->verificationUrl($notifiable))
+            ->action(__('platform.verify.mail_action', [], $locale), static::signedUrl($notifiable))
             ->line(__('platform.verify.mail_outro', [], $locale));
     }
 
-    protected function verificationUrl($notifiable): string
+    /**
+     * Public helper so controllers can show an on-page link when SMTP fails.
+     */
+    public static function signedUrl(object $notifiable): string
     {
         return URL::temporarySignedRoute(
             'verification.verify',
@@ -35,5 +40,10 @@ class VerifyEmail extends BaseVerifyEmail
                 'hash' => sha1($notifiable->getEmailForVerification()),
             ]
         );
+    }
+
+    protected function verificationUrl($notifiable): string
+    {
+        return static::signedUrl($notifiable);
     }
 }

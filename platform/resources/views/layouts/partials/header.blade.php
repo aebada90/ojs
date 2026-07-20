@@ -272,7 +272,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                             </svg>
                         </button>
-                        <div x-show="openSection === 'account'" x-cloak x-collapse class="border-t border-gold-400/20 bg-cream px-3 py-3">
+                        <div x-show="openSection === 'account'" x-cloak class="border-t border-gold-400/20 bg-cream px-3 py-3">
                             <ul class="divide-y divide-stone-200/80 overflow-hidden rounded-lg bg-white">
                                 @auth
                                     <li>

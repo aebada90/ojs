@@ -170,4 +170,17 @@ return [
         'quick_rentals' => 'Rent traditional outfits',
         'quick_restaurants' => 'Best beer gardens',
     ],
+
+    'verify' => [
+        'title' => 'Verify your email',
+        'body' => 'Please verify your email address to access your dashboard.',
+        'sent' => 'A new verification link has been sent to your email address.',
+        'hint' => 'Check your inbox and spam folder. The link expires after a short time.',
+        'resend' => 'Resend verification email',
+        'logout' => 'Sign out and use a different account',
+        'mail_subject' => 'Verify your Oktoberfest account',
+        'mail_line' => 'Please click the button below to verify your email address.',
+        'mail_action' => 'Verify Email Address',
+        'mail_outro' => 'If you did not create an account, no further action is required.',
+    ],
 ];

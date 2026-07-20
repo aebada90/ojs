@@ -204,6 +204,32 @@ PLATFORM_WHITE_LABEL=true
 - Spatie roles (guest → super_admin)
 - Audit logs table ready
 
+## Email verification (Hostinger)
+
+Dashboard access requires a verified email (`/email/verify`).
+
+1. Create a mailbox in hPanel (e.g. `noreply@oktoberhub.de`)
+2. Set SMTP in `.env`:
+
+```env
+APP_URL=https://oktoberhub.de
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.hostinger.com
+MAIL_PORT=587
+MAIL_USERNAME=noreply@oktoberhub.de
+MAIL_PASSWORD=your-mailbox-password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=noreply@oktoberhub.de
+```
+
+3. Ensure cron is running (`php artisan schedule:run` every minute)
+
+**Unlock a stuck user via SSH** (when mail is blocked):
+
+```bash
+php artisan users:verify user@example.com
+```
+
 ## Next Steps
 
 This foundation includes homepage, search, AI trip planner, auth, admin dashboard, core schema, and module scaffolding. Extend each module independently:

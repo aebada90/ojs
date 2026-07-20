@@ -170,4 +170,17 @@ return [
         'quick_rentals' => 'Tracht mieten',
         'quick_restaurants' => 'Beste Biergärten',
     ],
+
+    'verify' => [
+        'title' => 'E-Mail bestätigen',
+        'body' => 'Bitte bestätige deine E-Mail-Adresse, um auf dein Dashboard zuzugreifen.',
+        'sent' => 'Ein neuer Bestätigungslink wurde an deine E-Mail-Adresse gesendet.',
+        'hint' => 'Prüfe Posteingang und Spam-Ordner. Der Link ist nur kurze Zeit gültig.',
+        'resend' => 'Bestätigungs-E-Mail erneut senden',
+        'logout' => 'Abmelden und anderes Konto verwenden',
+        'mail_subject' => 'Bestätige dein Oktoberfest-Konto',
+        'mail_line' => 'Bitte klicke auf den Button unten, um deine E-Mail-Adresse zu bestätigen.',
+        'mail_action' => 'E-Mail-Adresse bestätigen',
+        'mail_outro' => 'Falls du kein Konto erstellt hast, ist keine weitere Aktion nötig.',
+    ],
 ];

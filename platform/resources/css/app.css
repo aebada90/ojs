@@ -116,3 +116,19 @@
 [x-cloak] {
     display: none !important;
 }
+
+.countdown {
+    @apply inline-flex flex-wrap gap-2.5;
+}
+
+.countdown-unit {
+    @apply min-w-[4.25rem] rounded-xl border border-white/20 bg-bavarian-950/60 px-3 py-2.5 text-center shadow-inner sm:min-w-[4.75rem];
+}
+
+.countdown-value {
+    @apply block font-display text-2xl font-bold leading-none tracking-wide text-gold-200 sm:text-3xl;
+}
+
+.countdown-label {
+    @apply mt-1.5 block text-[10px] font-bold uppercase tracking-[0.14em] text-white/80 sm:text-[11px];
+}

@@ -208,7 +208,7 @@ PLATFORM_WHITE_LABEL=true
 
 Dashboard access requires a verified email (`/email/verify`).
 
-1. Create a mailbox in hPanel (e.g. `noreply@oktoberhub.de`)
+1. Create a mailbox in hPanel (use `info@oktoberhub.de`)
 2. Set SMTP in `.env`:
 
 ```env
@@ -216,10 +216,10 @@ APP_URL=https://oktoberhub.de
 MAIL_MAILER=smtp
 MAIL_HOST=smtp.hostinger.com
 MAIL_PORT=587
-MAIL_USERNAME=noreply@oktoberhub.de
+MAIL_USERNAME=info@oktoberhub.de
 MAIL_PASSWORD=your-mailbox-password
 MAIL_ENCRYPTION=tls
-MAIL_FROM_ADDRESS=noreply@oktoberhub.de
+MAIL_FROM_ADDRESS=info@oktoberhub.de
 ```
 
 3. Ensure cron is running (`php artisan schedule:run` every minute)

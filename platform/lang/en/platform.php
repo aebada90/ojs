@@ -31,6 +31,7 @@ return [
         'meet_people' => 'Meet People',
         'meet_up' => 'Meet Up',
         'models' => 'Models',
+        'dating' => 'Dating',
         'book' => 'Book & Reserve',
         'plan' => 'Plan & Shop',
         'meet' => 'Meet & Connect',
@@ -104,6 +105,26 @@ return [
             'title' => 'Property Listings',
             'subtitle' => 'Buy, sell, or rent residential and commercial properties.',
         ],
+        'meet' => [
+            'title' => 'Meet People at the Wiesn',
+            'subtitle' => 'Join tent hops, opening-day crews, and festival meetups.',
+        ],
+        'models' => [
+            'title' => 'Featured Models',
+            'subtitle' => 'Discover talent, portfolios, and festival collaborations.',
+        ],
+        'parties' => [
+            'title' => 'Parties & Nightlife',
+            'subtitle' => 'After-parties, club nights, and private festival bashes.',
+        ],
+        'bars' => [
+            'title' => 'Bars & Pubs',
+            'subtitle' => 'Craft beer, cocktail bars, and Munich nightlife spots.',
+        ],
+        'cafes' => [
+            'title' => 'Cafés',
+            'subtitle' => 'Coffee stops, brunch spots, and quiet breaks near the Wiesn.',
+        ],
         'view_all' => 'View all',
         'empty_listings' => 'Featured :type listings will appear here after seeding.',
         'empty_products' => 'Marketplace products will appear here after seeding.',
@@ -115,11 +136,37 @@ return [
         'rental' => 'Rentals',
         'product' => 'Products',
         'event' => 'Events',
+        'party' => 'Parties',
         'property' => 'Properties',
         'restaurant' => 'Restaurants',
+        'bar' => 'Bars',
+        'cafe' => 'Cafés',
         'experience' => 'Experiences',
         'service' => 'Services',
         'job' => 'Jobs',
+        'model' => 'Models',
+    ],
+
+    'meet' => [
+        'badge' => 'Social',
+        'title' => 'Meet People',
+        'by' => 'by',
+        'going' => 'going',
+        'empty' => 'No meetups yet — start one and gather your Wiesn crew.',
+        'create' => 'Create a meetup',
+        'types' => [
+            'tent_hop' => 'Tent hop',
+            'opening_day' => 'Opening day',
+        ],
+    ],
+
+    'ecosystem' => [
+        'title' => 'Connected Festival Ecosystem',
+        'subtitle' => 'Models, dating, and social discovery — built into one Oktoberfest platform.',
+        'models_teaser' => 'Book talent and browse festival-ready portfolios.',
+        'browse_models' => 'Browse models',
+        'dating_teaser' => 'Meet festival vibes and match with fellow Wiesn guests.',
+        'open_dating' => 'Open dating',
     ],
 
     'map' => [
@@ -128,6 +175,8 @@ return [
         'ready_title' => 'Map Module Ready',
         'ready_subtitle' => 'Plug in real-time APIs without architecture changes.',
         'layers' => ['Crowds', 'Weather', 'Traffic', 'Parking', 'Hotels', 'Events', 'Emergency'],
+        'click_tent' => 'Tap a tent to explore hours, crowds, and booking options.',
+        'book_tent' => 'Book this tent',
     ],
 
     'partners' => [
@@ -190,7 +239,10 @@ return [
         'business' => 'For Business',
         'become_vendor' => 'Become a Vendor',
         'list_property' => 'List Your Property',
+        'list_your_stuff' => 'List your stuff',
         'post_job' => 'Post a Job',
+        'find_jobs' => 'Find jobs',
+        'vendor_pricing' => 'Vendor pricing',
         'event_organizer' => 'Event Organizer',
         'newsletter' => 'Newsletter',
         'newsletter_text' => 'Get AI-curated festival tips and exclusive deals.',

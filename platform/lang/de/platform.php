@@ -31,6 +31,7 @@ return [
         'meet_people' => 'Leute treffen',
         'meet_up' => 'Meetup',
         'models' => 'Models',
+        'dating' => 'Dating',
         'book' => 'Buchen & Reservieren',
         'plan' => 'Planen & Shop',
         'meet' => 'Treffen & Vernetzen',
@@ -104,6 +105,26 @@ return [
             'title' => 'Immobilien',
             'subtitle' => 'Kaufen, verkaufen oder mieten — Wohn- und Gewerbeimmobilien.',
         ],
+        'meet' => [
+            'title' => 'Leute auf der Wiesn treffen',
+            'subtitle' => 'Zelt-Touren, Eröffnungsteams und Festival-Meetups mitmachen.',
+        ],
+        'models' => [
+            'title' => 'Empfohlene Models',
+            'subtitle' => 'Talente, Portfolios und Festival-Kooperationen entdecken.',
+        ],
+        'parties' => [
+            'title' => 'Partys & Nachtleben',
+            'subtitle' => 'Afterpartys, Clubnächte und private Festival-Feiern.',
+        ],
+        'bars' => [
+            'title' => 'Bars & Pubs',
+            'subtitle' => 'Craft Beer, Cocktailbars und Münchner Nachtleben.',
+        ],
+        'cafes' => [
+            'title' => 'Cafés',
+            'subtitle' => 'Kaffee, Brunch und ruhige Pausen nahe der Wiesn.',
+        ],
         'view_all' => 'Alle anzeigen',
         'empty_listings' => 'Empfohlene :type-Einträge erscheinen hier nach dem Seeding.',
         'empty_products' => 'Marktplatz-Produkte erscheinen hier nach dem Seeding.',
@@ -115,11 +136,37 @@ return [
         'rental' => 'Vermietung',
         'product' => 'Produkte',
         'event' => 'Events',
+        'party' => 'Partys',
         'property' => 'Immobilien',
         'restaurant' => 'Restaurants',
+        'bar' => 'Bars',
+        'cafe' => 'Cafés',
         'experience' => 'Erlebnisse',
         'service' => 'Dienstleistungen',
         'job' => 'Jobs',
+        'model' => 'Models',
+    ],
+
+    'meet' => [
+        'badge' => 'Social',
+        'title' => 'Leute treffen',
+        'by' => 'von',
+        'going' => 'dabei',
+        'empty' => 'Noch keine Meetups — starte eines und sammle deine Wiesn-Crew.',
+        'create' => 'Meetup erstellen',
+        'types' => [
+            'tent_hop' => 'Zelt-Tour',
+            'opening_day' => 'Eröffnungstag',
+        ],
+    ],
+
+    'ecosystem' => [
+        'title' => 'Vernetztes Festival-Ökosystem',
+        'subtitle' => 'Models, Dating und Social Discovery — alles in einer Oktoberfest-Plattform.',
+        'models_teaser' => 'Talente buchen und festivalreife Portfolios entdecken.',
+        'browse_models' => 'Models entdecken',
+        'dating_teaser' => 'Festival-Stimmung treffen und Wiesn-Gäste matchen.',
+        'open_dating' => 'Dating öffnen',
     ],
 
     'map' => [
@@ -128,6 +175,8 @@ return [
         'ready_title' => 'Kartenmodul bereit',
         'ready_subtitle' => 'Echtzeit-APIs einbinden ohne Architekturänderungen.',
         'layers' => ['Menschenmengen', 'Wetter', 'Verkehr', 'Parkplätze', 'Hotels', 'Events', 'Notfall'],
+        'click_tent' => 'Tippe ein Zelt für Zeiten, Andrang und Buchungsoptionen.',
+        'book_tent' => 'Dieses Zelt buchen',
     ],
 
     'partners' => [
@@ -190,7 +239,10 @@ return [
         'business' => 'Für Unternehmen',
         'become_vendor' => 'Anbieter werden',
         'list_property' => 'Immobilie inserieren',
+        'list_your_stuff' => 'Dein Angebot einstellen',
         'post_job' => 'Job veröffentlichen',
+        'find_jobs' => 'Jobs finden',
+        'vendor_pricing' => 'Anbieter-Preise',
         'event_organizer' => 'Event-Veranstalter',
         'newsletter' => 'Newsletter',
         'newsletter_text' => 'KI-kuratierte Festival-Tipps und exklusive Angebote.',

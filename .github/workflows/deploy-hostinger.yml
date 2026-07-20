@@ -1,0 +1,52 @@
+name: Deploy to Hostinger (oktoberhub.de)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - cursor/oktoberfest-platform-fea0
+    paths:
+      - 'platform/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ secrets.HOSTINGER_FTP_HOST != '' && secrets.HOSTINGER_FTP_USER != '' && secrets.HOSTINGER_FTP_PASSWORD != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build platform
+        working-directory: platform
+        run: |
+          composer install --no-dev --optimize-autoloader --no-interaction
+          npm ci
+          npm run build
+
+      - name: Deploy platform via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.HOSTINGER_FTP_HOST }}
+          username: ${{ secrets.HOSTINGER_FTP_USER }}
+          password: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
+          port: ${{ secrets.HOSTINGER_FTP_PORT || 21 }}
+          local-dir: ./platform/
+          server-dir: ${{ secrets.HOSTINGER_FTP_DIR || '/public_html/platform/' }}
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/tests/**
+            **/.env
+            **/.env.*
+            !**/.env.example

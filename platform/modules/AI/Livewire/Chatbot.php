@@ -20,11 +20,18 @@ class Chatbot extends Component
 
     public function mount(ChatSessionService $sessions): void
     {
-        $this->sessionId = session('chatbot_session_id');
+        try {
+            $this->sessionId = session('chatbot_session_id');
 
-        if ($this->sessionId) {
-            $session = $sessions->getOrCreateSession($this->sessionId);
-            $this->conversation = $sessions->getConversation($session);
+            if ($this->sessionId) {
+                $session = $sessions->getOrCreateSession($this->sessionId);
+                $this->conversation = $sessions->getConversation($session);
+            }
+        } catch (\Throwable $e) {
+            report($e);
+            session()->forget('chatbot_session_id');
+            $this->sessionId = null;
+            $this->conversation = [];
         }
     }
 

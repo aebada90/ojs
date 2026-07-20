@@ -34,7 +34,9 @@
 
     @include('layouts.partials.footer')
 
-    <livewire:ai.chatbot />
+    @unless (request()->is('email/*', 'login', 'register', 'forgot-password', 'reset-password*', 'two-factor-challenge', 'user/confirm-password'))
+        <livewire:ai.chatbot />
+    @endunless
 
     @livewireScripts
     @stack('scripts')

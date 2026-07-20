@@ -22,7 +22,7 @@
             ] as [$href, $key])
                 <a href="{{ $href }}" class="rounded-lg px-3 py-2 text-white/80 transition hover:bg-white/10 hover:text-gold-300">{{ __("platform.{$key}") }}</a>
             @endforeach
-            <a href="{{ route('search.results') }}" class="rounded-lg px-3 py-2 text-gold-300 transition hover:bg-gold-400/10">{{ __('platform.nav.search') }}</a>
+            <a href="{{ \Illuminate\Support\Facades\Route::has('search.results') ? route('search.results') : url('/search') }}" class="rounded-lg px-3 py-2 text-gold-300 transition hover:bg-gold-400/10">{{ __('platform.nav.search') }}</a>
         </nav>
 
         <div class="flex items-center gap-2 sm:gap-3">

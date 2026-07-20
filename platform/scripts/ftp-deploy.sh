@@ -63,6 +63,7 @@ echo "   User: $FTP_USER"
 lftp -c "
 set ftp:ssl-allow no
 set ftp:passive-mode true
+set ftp:use-epsv false
 set net:max-retries 3
 set net:timeout 20
 set mirror:parallel-transfer-count 4

@@ -172,6 +172,19 @@ return [
         'badge_short' => 'News',
     ],
 
+    'countdown' => [
+        'label' => 'Countdown zum Oktoberfest 2026',
+        'days' => 'Tage',
+        'hours' => 'Std.',
+        'minutes' => 'Min.',
+        'seconds' => 'Sek.',
+    ],
+
+    'shorts' => [
+        'title' => 'Wiesn Shorts',
+        'subtitle' => 'Schnelle Festival-Momente — Zelte, Essen, Fahrgeschäfte und Stimmung.',
+    ],
+
     'footer' => [
         'discover' => 'Entdecken',
         'business' => 'Für Unternehmen',

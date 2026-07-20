@@ -172,6 +172,19 @@ return [
         'badge_short' => 'News',
     ],
 
+    'countdown' => [
+        'label' => 'Countdown to Oktoberfest 2026',
+        'days' => 'Days',
+        'hours' => 'Hours',
+        'minutes' => 'Min',
+        'seconds' => 'Sec',
+    ],
+
+    'shorts' => [
+        'title' => 'Wiesn Shorts',
+        'subtitle' => 'Quick festival moments — tents, food, rides, and vibes.',
+    ],
+
     'footer' => [
         'discover' => 'Discover',
         'business' => 'For Business',

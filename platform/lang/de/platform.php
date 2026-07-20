@@ -166,6 +166,12 @@ return [
         'no_results' => 'Keine Ergebnisse. Versuche eine andere Suche oder seede Demo-Daten.',
     ],
 
+    'news' => [
+        'aria' => 'Oktoberfest Nachrichten-Ticker',
+        'badge' => 'Wiesn News',
+        'badge_short' => 'News',
+    ],
+
     'footer' => [
         'discover' => 'Entdecken',
         'business' => 'Für Unternehmen',

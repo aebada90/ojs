@@ -26,6 +26,7 @@
 </head>
 <body class="min-h-full pattern-bavarian text-beer antialiased">
     @include('layouts.partials.header')
+    <x-news.marquee />
 
     <main>
         @yield('content')

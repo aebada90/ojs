@@ -166,6 +166,12 @@ return [
         'no_results' => 'No results found. Try another search or seed demo data.',
     ],
 
+    'news' => [
+        'aria' => 'Oktoberfest news ticker',
+        'badge' => 'Wiesn News',
+        'badge_short' => 'News',
+    ],
+
     'footer' => [
         'discover' => 'Discover',
         'business' => 'For Business',

@@ -1,0 +1,134 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'DM Sans', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Playfair Display', ui-serif, Georgia, serif;
+
+    --color-bavarian-50: #eff6ff;
+    --color-bavarian-100: #dbeafe;
+    --color-bavarian-200: #bfdbfe;
+    --color-bavarian-300: #93c5fd;
+    --color-bavarian-400: #3b82f6;
+    --color-bavarian-500: #0066b3;
+    --color-bavarian-600: #005091;
+    --color-bavarian-700: #003d6e;
+    --color-bavarian-800: #002a4d;
+    --color-bavarian-900: #001829;
+
+    --color-gold-50: #fffbeb;
+    --color-gold-100: #fef3c7;
+    --color-gold-200: #fde68a;
+    --color-gold-300: #fcd34d;
+    --color-gold-400: #f5b800;
+    --color-gold-500: #e8a317;
+    --color-gold-600: #d4920d;
+    --color-gold-700: #b45309;
+
+    --color-cream: #fff8e7;
+    --color-beer: #2c1810;
+    --color-beer-light: #4a2c1a;
+}
+
+.pattern-bavarian {
+    background-color: var(--color-cream);
+    background-image:
+        linear-gradient(135deg, rgba(0, 102, 179, 0.04) 25%, transparent 25%),
+        linear-gradient(225deg, rgba(0, 102, 179, 0.04) 25%, transparent 25%),
+        linear-gradient(45deg, rgba(0, 102, 179, 0.04) 25%, transparent 25%),
+        linear-gradient(315deg, rgba(0, 102, 179, 0.04) 25%, transparent 25%);
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+    background-size: 20px 20px;
+}
+
+.pattern-hero {
+    background:
+        radial-gradient(ellipse 80% 60% at 70% 20%, rgba(245, 184, 0, 0.18), transparent 50%),
+        radial-gradient(ellipse 60% 50% at 20% 80%, rgba(0, 102, 179, 0.15), transparent 50%),
+        linear-gradient(160deg, #001829 0%, #003d6e 35%, #005091 65%, #002a4d 100%);
+}
+
+.btn-gold {
+    @apply inline-flex items-center justify-center rounded-full bg-gradient-to-r from-gold-400 to-gold-500 px-6 py-3 text-sm font-bold text-beer shadow-lg transition hover:from-gold-300 hover:to-gold-400;
+}
+
+.btn-outline-light {
+    @apply inline-flex items-center justify-center rounded-full border-2 border-white/40 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:border-gold-400 hover:bg-white/20;
+}
+
+.card-fest {
+    @apply overflow-hidden rounded-2xl border border-bavarian-100 bg-white shadow-md transition duration-300 hover:-translate-y-1 hover:border-gold-400/50 hover:shadow-xl;
+}
+
+.card-fest-image {
+    @apply relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-bavarian-100 via-cream to-gold-100;
+}
+
+.card-fest-image::after {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-t from-bavarian-900/20 to-transparent;
+}
+
+.section-heading {
+    @apply font-display text-3xl font-bold text-bavarian-900 sm:text-4xl;
+}
+
+.section-subheading {
+    @apply mt-2 text-base text-bavarian-700/80;
+}
+
+.badge-fest {
+    @apply inline-flex items-center gap-2 rounded-full border border-gold-400/40 bg-gold-400/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-gold-300;
+}
+
+.glass-panel {
+    @apply rounded-3xl border border-white/20 bg-white/10 p-6 shadow-2xl backdrop-blur-md;
+}
+
+.lang-btn {
+    @apply rounded-lg px-2.5 py-1 text-xs font-bold uppercase tracking-wide transition;
+}
+
+.lang-btn-active {
+    @apply bg-gold-400 text-beer;
+}
+
+.lang-btn-inactive {
+    @apply text-white/70 hover:bg-white/10 hover:text-white;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+[x-cloak] {
+    display: none !important;
+}
+
+.countdown {
+    @apply inline-flex flex-wrap gap-2.5;
+}
+
+.countdown-unit {
+    @apply min-w-[4.25rem] rounded-xl border border-white/20 bg-bavarian-950/60 px-3 py-2.5 text-center shadow-inner sm:min-w-[4.75rem];
+}
+
+.countdown-value {
+    @apply block font-display text-2xl font-bold leading-none tracking-wide text-gold-200 sm:text-3xl;
+}
+
+.countdown-label {
+    @apply mt-1.5 block text-[10px] font-bold uppercase tracking-[0.14em] text-white/80 sm:text-[11px];
+}

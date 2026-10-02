@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\MatchmakingConnection;
-use App\Models\MatchmakingProfile;
-use App\Support\ConnectDemoProfiles;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
@@ -16,53 +13,98 @@ class MatchmakingController extends Controller
     public function index(): View
     {
         return view('matchmaking.index', [
-            'nexora' => config('connect.nexora'),
-            'intents' => config('connect.intents'),
-            'peopleCount' => $this->peopleCount(),
+            'nexora' => $this->nexora(),
+            'intents' => $this->intents(),
+            'peopleCount' => count($this->demoProfiles()),
         ]);
     }
 
     public function people(Request $request): View
     {
         $intent = $request->string('intent')->toString();
-        $profiles = $this->listProfiles($intent);
+        $profiles = $this->demoProfiles();
+        if ($intent !== '') {
+            $profiles = array_values(array_filter($profiles, fn ($p) => ($p['intent'] ?? '') === $intent));
+        }
+
+        // Prefer DB profiles when the table exists and has rows.
+        if ($this->tablesReady()) {
+            try {
+                $query = \App\Models\MatchmakingProfile::query()
+                    ->where('is_public', true)
+                    ->where('open_to_connect', true)
+                    ->latest();
+                if ($intent !== '') {
+                    $query->where('intent', $intent);
+                }
+                $rows = $query->limit(48)->get();
+                if ($rows->isNotEmpty()) {
+                    return view('matchmaking.people', [
+                        'profiles' => $rows->all(),
+                        'intent' => $intent,
+                        'intents' => $this->intents(),
+                        'nexora' => $this->nexora(),
+                        'usingDemo' => false,
+                    ]);
+                }
+            } catch (\Throwable) {
+                // fall back to demo
+            }
+        }
 
         return view('matchmaking.people', [
             'profiles' => $profiles,
             'intent' => $intent,
-            'intents' => config('connect.intents'),
-            'nexora' => config('connect.nexora'),
-            'usingDemo' => ! $this->tablesReady(),
+            'intents' => $this->intents(),
+            'nexora' => $this->nexora(),
+            'usingDemo' => true,
         ]);
     }
 
     public function show(string $slug): View
     {
-        $profile = $this->findProfile($slug);
+        $profile = null;
+        if ($this->tablesReady()) {
+            try {
+                $profile = \App\Models\MatchmakingProfile::query()->where('slug', $slug)->first();
+            } catch (\Throwable) {
+                $profile = null;
+            }
+        }
+
+        $isDemo = false;
+        if (! $profile) {
+            foreach ($this->demoProfiles() as $row) {
+                if ($row['slug'] === $slug) {
+                    $profile = $row;
+                    $isDemo = true;
+                    break;
+                }
+            }
+        }
+
         abort_if(! $profile, 404);
 
         return view('matchmaking.show', [
             'profile' => $profile,
-            'nexora' => config('connect.nexora'),
-            'isDemo' => ! ($profile instanceof MatchmakingProfile),
+            'nexora' => $this->nexora(),
+            'isDemo' => $isDemo,
         ]);
     }
 
     public function editProfile(Request $request): View
     {
-        $profile = $this->ensureProfile($request->user());
-
         return view('matchmaking.profile-edit', [
-            'profile' => $profile,
-            'intents' => config('connect.intents'),
-            'nexora' => config('connect.nexora'),
+            'profile' => $this->ensureProfileArray($request->user()),
+            'intents' => $this->intents(),
+            'nexora' => $this->nexora(),
         ]);
     }
 
     public function updateProfile(Request $request): RedirectResponse
     {
         if (! $this->tablesReady()) {
-            return back()->with('error', 'Matchmaking profiles are being set up. Try again shortly, or open Nexora Connect.');
+            return redirect()->away($this->nexora()['register']);
         }
 
         $data = $request->validate([
@@ -83,7 +125,18 @@ class MatchmakingController extends Controller
             'open_to_connect' => ['nullable', 'boolean'],
         ]);
 
-        $profile = $this->ensureProfile($request->user());
+        $profile = \App\Models\MatchmakingProfile::query()->firstOrCreate(
+            ['user_id' => $request->user()->id],
+            [
+                'slug' => Str::slug($request->user()->name).'-'.Str::lower(Str::random(4)),
+                'display_name' => $request->user()->name,
+                'intent' => 'friends',
+                'city' => 'Munich',
+                'is_public' => true,
+                'open_to_connect' => true,
+            ]
+        );
+
         $profile->fill([
             ...$data,
             'interests' => $this->csvToArray($data['interests'] ?? null),
@@ -92,97 +145,66 @@ class MatchmakingController extends Controller
             'open_to_connect' => $request->boolean('open_to_connect', true),
         ])->save();
 
-        return redirect()
-            ->route('matchmaking.show', $profile->slug)
+        return redirect()->route('matchmaking.show', $profile->slug)
             ->with('success', 'Your Connect profile is live.');
     }
 
     public function connections(Request $request): View
     {
-        $profile = $this->ensureProfile($request->user());
-        $pending = collect();
-        $accepted = collect();
-
-        if ($this->tablesReady() && $profile instanceof MatchmakingProfile) {
-            $pending = MatchmakingConnection::query()
-                ->with('requester')
-                ->where('receiver_profile_id', $profile->id)
-                ->where('status', 'pending')
-                ->latest()
-                ->get();
-
-            $accepted = MatchmakingConnection::query()
-                ->with(['requester', 'receiver'])
-                ->where('status', 'accepted')
-                ->where(function ($q) use ($profile) {
-                    $q->where('requester_profile_id', $profile->id)
-                        ->orWhere('receiver_profile_id', $profile->id);
-                })
-                ->latest()
-                ->get();
-        }
-
         return view('matchmaking.connections', [
-            'profile' => $profile,
-            'pending' => $pending,
-            'accepted' => $accepted,
-            'nexora' => config('connect.nexora'),
+            'profile' => $this->ensureProfileArray($request->user()),
+            'pending' => collect(),
+            'accepted' => collect(),
+            'nexora' => $this->nexora(),
         ]);
     }
 
     public function connect(Request $request, string $slug): RedirectResponse
     {
-        if (! $this->tablesReady()) {
-            return redirect()->away(config('connect.nexora.register'));
-        }
-
-        $me = $this->ensureProfile($request->user());
-        $them = MatchmakingProfile::query()->where('slug', $slug)->firstOrFail();
-
-        if ($me->id === $them->id) {
-            return back()->with('error', 'You cannot connect with yourself.');
-        }
-
-        MatchmakingConnection::query()->firstOrCreate(
-            [
-                'requester_profile_id' => $me->id,
-                'receiver_profile_id' => $them->id,
-            ],
-            [
-                'status' => 'pending',
-                'message' => $request->string('message')->toString() ?: null,
-            ]
-        );
-
-        return back()->with('success', 'Connection request sent.');
+        return redirect()->away($this->nexora()['register']);
     }
 
     public function accept(Request $request, string $slug): RedirectResponse
     {
-        return $this->updateConnectionStatus($request, $slug, 'accepted');
+        return back();
     }
 
     public function decline(Request $request, string $slug): RedirectResponse
     {
-        return $this->updateConnectionStatus($request, $slug, 'declined');
+        return back();
     }
 
-    private function updateConnectionStatus(Request $request, string $slug, string $status): RedirectResponse
+    private function nexora(): array
     {
-        if (! $this->tablesReady()) {
-            return back();
+        $cfg = config('connect.nexora');
+        if (is_array($cfg) && ! empty($cfg['home'])) {
+            return $cfg;
         }
 
-        $me = $this->ensureProfile($request->user());
-        $them = MatchmakingProfile::query()->where('slug', $slug)->firstOrFail();
+        return [
+            'name' => 'Nexora',
+            'tagline' => 'Connect. Discover. Meet.',
+            'home' => 'https://nexora.ehopn.com',
+            'register' => 'https://nexora.ehopn.com/register',
+            'login' => 'https://nexora.ehopn.com/login',
+            'reels' => 'https://nexora.ehopn.com/discover/reels',
+        ];
+    }
 
-        MatchmakingConnection::query()
-            ->where('receiver_profile_id', $me->id)
-            ->where('requester_profile_id', $them->id)
-            ->where('status', 'pending')
-            ->update(['status' => $status]);
+    private function intents(): array
+    {
+        $cfg = config('connect.intents');
+        if (is_array($cfg) && $cfg !== []) {
+            return $cfg;
+        }
 
-        return back()->with('success', $status === 'accepted' ? 'You are now connected.' : 'Request declined.');
+        return [
+            'dating' => 'Dating',
+            'friends' => 'Friends',
+            'business' => 'Business networking',
+            'events' => 'Events & parties',
+            'travel' => 'Travel buddies',
+        ];
     }
 
     private function tablesReady(): bool
@@ -194,122 +216,124 @@ class MatchmakingController extends Controller
         }
     }
 
-    private function peopleCount(): int
+    private function ensureProfileArray($user): array
     {
-        if (! $this->tablesReady()) {
-            return count(ConnectDemoProfiles::all());
-        }
-
-        try {
-            return max(
-                MatchmakingProfile::query()->where('is_public', true)->count(),
-                count(ConnectDemoProfiles::all())
-            );
-        } catch (\Throwable) {
-            return count(ConnectDemoProfiles::all());
-        }
-    }
-
-    private function listProfiles(string $intent = ''): array
-    {
-        if ($this->tablesReady()) {
-            try {
-                $query = MatchmakingProfile::query()
-                    ->where('is_public', true)
-                    ->where('open_to_connect', true)
-                    ->latest();
-
-                if ($intent !== '') {
-                    $query->where('intent', $intent);
-                }
-
-                $rows = $query->limit(48)->get();
-                if ($rows->isNotEmpty()) {
-                    return $rows->all();
-                }
-            } catch (\Throwable) {
-                // fall through to demo
-            }
-        }
-
-        $demo = ConnectDemoProfiles::all();
-        if ($intent !== '') {
-            $demo = array_values(array_filter($demo, fn ($p) => ($p['intent'] ?? '') === $intent));
-        }
-
-        return $demo;
-    }
-
-    private function findProfile(string $slug): MatchmakingProfile|array|null
-    {
-        if ($this->tablesReady()) {
-            try {
-                $row = MatchmakingProfile::query()->where('slug', $slug)->first();
-                if ($row) {
-                    return $row;
-                }
-            } catch (\Throwable) {
-                // demo fallback
-            }
-        }
-
-        return ConnectDemoProfiles::find($slug);
-    }
-
-    private function ensureProfile($user): MatchmakingProfile|array
-    {
-        if (! $user) {
-            abort(403);
-        }
-
-        if (! $this->tablesReady()) {
-            return [
-                'slug' => 'you',
-                'display_name' => $user->name,
-                'headline' => '',
-                'bio' => $user->bio,
-                'city' => 'Munich',
-                'age' => null,
-                'intent' => 'friends',
-                'interests' => [],
-                'languages' => [$user->locale ?? 'en'],
-                'avatar_url' => $user->avatar,
-                'company' => null,
-                'role_title' => null,
-                'linkedin_url' => null,
-                'nexora_url' => null,
-                'is_public' => true,
-                'open_to_connect' => true,
-            ];
-        }
-
-        return MatchmakingProfile::query()->firstOrCreate(
-            ['user_id' => $user->id],
-            [
-                'slug' => Str::slug($user->username ?: $user->name).'-'.Str::lower(Str::random(4)),
-                'display_name' => $user->name,
-                'headline' => 'Oktoberfest Connect profile',
-                'bio' => $user->bio,
-                'city' => 'Munich',
-                'intent' => 'friends',
-                'interests' => [],
-                'languages' => array_filter([$user->locale ?? 'en']),
-                'avatar_url' => $user->avatar,
-                'is_public' => true,
-                'open_to_connect' => true,
-            ]
-        );
+        return [
+            'slug' => 'you',
+            'display_name' => $user->name ?? 'Member',
+            'headline' => '',
+            'bio' => $user->bio ?? '',
+            'city' => 'Munich',
+            'age' => null,
+            'intent' => 'friends',
+            'interests' => [],
+            'languages' => [$user->locale ?? 'en'],
+            'avatar_url' => $user->avatar ?? null,
+            'company' => null,
+            'role_title' => null,
+            'linkedin_url' => null,
+            'nexora_url' => null,
+            'is_public' => true,
+            'open_to_connect' => true,
+        ];
     }
 
     private function csvToArray(?string $value): array
     {
-        if (blank($value)) {
+        if ($value === null || trim($value) === '') {
             return [];
         }
 
-        return array_values(array_filter(array_map(
-            fn ($part) => trim($part),
-            explode(',', $value)
-        )));
+        return array_values(array_filter(array_map('trim', explode(',', $value))));
+    }
+
+    private function demoProfiles(): array
+    {
+        return [
+            [
+                'slug' => 'lena-munich',
+                'display_name' => 'Lena K.',
+                'headline' => 'First Wiesn — looking for tent buddies',
+                'bio' => 'Flying in from Berlin. Love live music, photography, and a good Maß.',
+                'city' => 'Munich',
+                'age' => 28,
+                'intent' => 'friends',
+                'interests' => ['music', 'photography', 'tents'],
+                'languages' => ['de', 'en'],
+                'avatar_url' => 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop',
+                'company' => null,
+                'role_title' => null,
+            ],
+            [
+                'slug' => 'marco-business',
+                'display_name' => 'Marco S.',
+                'headline' => 'Hospitality founder — open to networking',
+                'bio' => 'Building tourism tech. Happy to meet founders, vendors, and EXPO guests.',
+                'city' => 'Munich',
+                'age' => 34,
+                'intent' => 'business',
+                'interests' => ['startups', 'hospitality', 'ai'],
+                'languages' => ['en', 'de', 'it'],
+                'avatar_url' => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
+                'company' => 'Alpine Labs',
+                'role_title' => 'Founder',
+            ],
+            [
+                'slug' => 'sofia-travel',
+                'display_name' => 'Sofia R.',
+                'headline' => 'Solo traveler — brunch & bar crawls',
+                'bio' => 'Here for opening weekend. Looking for a friendly crew for food and nightlife.',
+                'city' => 'Munich',
+                'age' => 26,
+                'intent' => 'travel',
+                'interests' => ['food', 'nightlife', 'coffee'],
+                'languages' => ['en', 'es'],
+                'avatar_url' => 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop',
+                'company' => null,
+                'role_title' => null,
+            ],
+            [
+                'slug' => 'jonas-events',
+                'display_name' => 'Jonas W.',
+                'headline' => 'Event producer — after-parties & tents',
+                'bio' => 'Know the best after-hours spots. Always happy to share tips and connect crews.',
+                'city' => 'Munich',
+                'age' => 31,
+                'intent' => 'events',
+                'interests' => ['parties', 'dj', 'networking'],
+                'languages' => ['de', 'en'],
+                'avatar_url' => 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop',
+                'company' => 'Wiesn Nights',
+                'role_title' => 'Producer',
+            ],
+            [
+                'slug' => 'amina-dating',
+                'display_name' => 'Amina H.',
+                'headline' => 'Here for the vibes — open to meeting someone new',
+                'bio' => 'Dirndl ready. Love dancing, good conversation, and ferris-wheel views.',
+                'city' => 'Munich',
+                'age' => 29,
+                'intent' => 'dating',
+                'interests' => ['dancing', 'festivals', 'coffee'],
+                'languages' => ['en', 'de', 'fr'],
+                'avatar_url' => 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop',
+                'company' => null,
+                'role_title' => null,
+            ],
+            [
+                'slug' => 'erik-network',
+                'display_name' => 'Erik P.',
+                'headline' => 'Investor visiting MunichTech EXPO + Wiesn',
+                'bio' => 'In town for EXPO and Oktoberfest. Open to coffee chats with builders.',
+                'city' => 'Munich',
+                'age' => 38,
+                'intent' => 'business',
+                'interests' => ['venture', 'ai', 'travel'],
+                'languages' => ['en', 'sv'],
+                'avatar_url' => 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop',
+                'company' => 'Northpeak Capital',
+                'role_title' => 'Partner',
+            ],
+        ];
     }
 }

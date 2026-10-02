@@ -13,7 +13,7 @@ class PartnerController extends Controller
     public function dating(): View
     {
         return view('partners.dating', [
-            'nexora' => config('connect.nexora'),
+            'nexora' => $this->nexora(),
         ]);
     }
 
@@ -39,10 +39,60 @@ class PartnerController extends Controller
         }
 
         return view('partners.connect', [
-            'nexora' => config('connect.nexora'),
-            'models' => config('connect.models'),
+            'nexora' => $this->nexora(),
+            'models' => $this->models(),
             'card' => $card,
-            'intents' => config('connect.intents'),
+            'intents' => $this->intents(),
         ]);
+    }
+
+    /** @return array{name:string,tagline:string,home:string,register:string,login:string,reels:string} */
+    private function nexora(): array
+    {
+        $cfg = config('connect.nexora');
+
+        return is_array($cfg) ? $cfg + [
+            'name' => 'Nexora',
+            'tagline' => 'Connect. Discover. Meet.',
+            'home' => 'https://nexora.ehopn.com',
+            'register' => 'https://nexora.ehopn.com/register',
+            'login' => 'https://nexora.ehopn.com/login',
+            'reels' => 'https://nexora.ehopn.com/discover/reels',
+        ] : [
+            'name' => 'Nexora',
+            'tagline' => 'Connect. Discover. Meet.',
+            'home' => 'https://nexora.ehopn.com',
+            'register' => 'https://nexora.ehopn.com/register',
+            'login' => 'https://nexora.ehopn.com/login',
+            'reels' => 'https://nexora.ehopn.com/discover/reels',
+        ];
+    }
+
+    /** @return array{name:string,home:string} */
+    private function models(): array
+    {
+        $cfg = config('connect.models');
+
+        return is_array($cfg) ? $cfg + [
+            'name' => 'HOPn Models',
+            'home' => 'https://models.ehopn.com',
+        ] : [
+            'name' => 'HOPn Models',
+            'home' => 'https://models.ehopn.com',
+        ];
+    }
+
+    /** @return array<string,string> */
+    private function intents(): array
+    {
+        $cfg = config('connect.intents');
+
+        return is_array($cfg) && $cfg !== [] ? $cfg : [
+            'dating' => 'Dating',
+            'friends' => 'Friends',
+            'business' => 'Business networking',
+            'events' => 'Events & parties',
+            'travel' => 'Travel buddies',
+        ];
     }
 }

@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 /**
  * Keyed deploy helper for Hostinger when FTP data channels are flaky.
+ * Lives in public_html; writes into public_html/laravel.
  *
- * Set OKTOBER_DEPLOY_KEY in the server environment (or .user.ini / .env export).
- * Usage:
- *   /deploy_pull.php?key=...&path=relative/under/laravel&url=https://raw.githubusercontent.com/aebada90/ojs/...
+ * Set OKTOBER_DEPLOY_KEY in the server environment when possible.
  */
 
 $key = $_GET['key'] ?? $_POST['key'] ?? '';
@@ -33,12 +32,8 @@ if (! preg_match('#^https://raw\.githubusercontent\.com/aebada90/ojs/#', $url)) 
     exit;
 }
 
-$docRoot = __DIR__;
-$laravelRoot = is_dir(dirname($docRoot).'/laravel')
-    ? dirname($docRoot).'/laravel'
-    : (is_dir($docRoot.'/laravel') ? $docRoot.'/laravel' : dirname($docRoot));
-
-$target = rtrim($laravelRoot, '/').'/'.ltrim($rel, '/');
+$root = is_dir(__DIR__.'/laravel') ? (__DIR__.'/laravel') : __DIR__;
+$target = rtrim($root, '/').'/'.ltrim($rel, '/');
 $dir = dirname($target);
 if (! is_dir($dir) && ! mkdir($dir, 0755, true) && ! is_dir($dir)) {
     http_response_code(500);

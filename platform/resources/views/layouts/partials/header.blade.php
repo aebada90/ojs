@@ -57,9 +57,12 @@
                 [
                     'title' => __('platform.nav.groups.connect'),
                     'links' => [
+                        ['href' => url('/matchmaking'), 'label' => __('platform.nav.matchmaking'), 'desc' => __('platform.nav.matchmaking_desc')],
                         ['href' => url('/meet'), 'label' => __('platform.nav.meet_people')],
+                        ['href' => url('/connect'), 'label' => __('platform.nav.digital_card'), 'desc' => __('platform.nav.digital_card_desc')],
                         ['href' => url('/meetup'), 'label' => __('platform.nav.meet_up')],
                         ['href' => url('/models'), 'label' => __('platform.nav.models')],
+                        ['href' => config('connect.nexora.home', 'https://nexora.ehopn.com'), 'label' => __('platform.nav.nexora'), 'external' => true],
                     ],
                 ],
             ],
@@ -122,8 +125,15 @@
                                     <ul class="space-y-0.5">
                                         @foreach ($group['links'] as $link)
                                             <li>
-                                                <a href="{{ $link['href'] }}" class="block rounded-lg px-2.5 py-2 text-sm font-medium text-beer transition hover:bg-white hover:text-bavarian-700">
-                                                    {{ $link['label'] }}
+                                                <a
+                                                    href="{{ $link['href'] }}"
+                                                    @if (!empty($link['external'])) target="_blank" rel="noopener noreferrer" @endif
+                                                    class="block rounded-lg px-2.5 py-2 text-sm font-medium text-beer transition hover:bg-white hover:text-bavarian-700"
+                                                >
+                                                    <span class="block">{{ $link['label'] }}</span>
+                                                    @if (!empty($link['desc']))
+                                                        <span class="mt-0.5 block text-[11px] font-normal leading-snug text-stone-500">{{ $link['desc'] }}</span>
+                                                    @endif
                                                 </a>
                                             </li>
                                         @endforeach
@@ -246,9 +256,13 @@
                                                     <a
                                                         href="{{ $link['href'] }}"
                                                         @click="close()"
+                                                        @if (!empty($link['external'])) target="_blank" rel="noopener noreferrer" @endif
                                                         class="block px-3.5 py-3 text-sm font-medium text-beer transition hover:bg-gold-50 hover:text-bavarian-700"
                                                     >
-                                                        {{ $link['label'] }}
+                                                        <span class="block">{{ $link['label'] }}</span>
+                                                        @if (!empty($link['desc']))
+                                                            <span class="mt-0.5 block text-[11px] font-normal leading-snug text-stone-500">{{ $link['desc'] }}</span>
+                                                        @endif
                                                     </a>
                                                 </li>
                                             @endforeach

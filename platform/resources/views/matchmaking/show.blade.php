@@ -45,17 +45,16 @@
             @endif
 
             <div class="mt-8 flex flex-wrap gap-3">
+                <a href="{{ route('chat.show', $slug) }}" class="btn-gold">{{ __('platform.network.chat') }}</a>
                 @auth
                     @if (!($isDemo ?? false))
                         <form method="POST" action="{{ route('matchmaking.connect', $slug) }}">
                             @csrf
-                            <button type="submit" class="btn-gold">{{ __('platform.matchmaking.send_connect') }}</button>
+                            <button type="submit" class="inline-flex rounded-full border-2 border-bavarian-300 px-5 py-2.5 text-sm font-bold text-bavarian-700 hover:border-gold-400">{{ __('platform.matchmaking.send_connect') }}</button>
                         </form>
                     @endif
-                @else
-                    <a href="{{ url('/login') }}" class="btn-gold">{{ __('platform.matchmaking.login_to_connect') }}</a>
                 @endauth
-                <a href="{{ $nexora['home'] }}" target="_blank" rel="noopener noreferrer" class="inline-flex rounded-full border-2 border-bavarian-300 px-5 py-2.5 text-sm font-bold text-bavarian-700 hover:border-gold-400">{{ __('platform.connect.open_nexora') }}</a>
+                <a href="{{ route('network.index') }}" class="inline-flex rounded-full border-2 border-bavarian-300 px-5 py-2.5 text-sm font-bold text-bavarian-700 hover:border-gold-400">{{ __('platform.nav.network') }}</a>
             </div>
         </div>
     </div>

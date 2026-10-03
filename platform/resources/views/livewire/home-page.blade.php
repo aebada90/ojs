@@ -72,6 +72,37 @@
     @include('components.home.section-grid', ['id' => 'jobs', 'title' => __('platform.sections.jobs.title'), 'subtitle' => __('platform.sections.jobs.subtitle'), 'items' => $featuredJobs, 'type' => 'job', 'alt' => true])
     @include('components.home.section-grid', ['id' => 'properties', 'title' => __('platform.sections.properties.title'), 'subtitle' => __('platform.sections.properties.subtitle'), 'items' => $featuredProperties, 'type' => 'property'])
 
+    {{-- Network --}}
+    <section id="network" class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+        <div class="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+                <span class="inline-block rounded-full bg-bavarian-100 px-4 py-1 text-xs font-bold uppercase tracking-widest text-bavarian-600">{{ __('platform.network.badge') }}</span>
+                <h2 class="section-heading mt-4">{{ __('platform.sections.network.title') }}</h2>
+                <p class="section-subheading">{{ __('platform.sections.network.subtitle') }}</p>
+            </div>
+            <div class="flex flex-wrap gap-3">
+                <a href="{{ url('/network') }}" class="btn-gold">{{ __('platform.nav.network') }}</a>
+                <a href="{{ url('/chat') }}" class="inline-flex rounded-full border-2 border-bavarian-300 px-5 py-2.5 text-sm font-bold text-bavarian-700 hover:border-gold-400">{{ __('platform.nav.chat') }}</a>
+            </div>
+        </div>
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            @foreach ($networkPeople as $profile)
+                <a href="{{ route('chat.show', $profile['slug']) }}" class="card-fest block overflow-hidden">
+                    <div class="aspect-[16/10] overflow-hidden bg-bavarian-100">
+                        @if (!empty($profile['avatar_url']))
+                            <img src="{{ $profile['avatar_url'] }}" alt="{{ $profile['display_name'] }}" class="h-full w-full object-cover" loading="lazy">
+                        @endif
+                    </div>
+                    <div class="p-4">
+                        <p class="font-semibold text-bavarian-900">{{ $profile['display_name'] }}</p>
+                        <p class="mt-1 line-clamp-2 text-sm text-stone-600">{{ $profile['headline'] }}</p>
+                        <p class="mt-3 text-xs font-bold uppercase tracking-wider text-gold-700">{{ __('platform.network.chat') }} →</p>
+                    </div>
+                </a>
+            @endforeach
+        </div>
+    </section>
+
     {{-- Digital Twin --}}
     <section id="map" class="relative overflow-hidden bg-bavarian-900 py-20 text-white">
         <div class="pointer-events-none absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 2px 2px, rgba(245,184,0,0.3) 1px, transparent 0); background-size: 32px 32px;"></div>

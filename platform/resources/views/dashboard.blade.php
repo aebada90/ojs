@@ -8,7 +8,15 @@
     <p class="mt-2 text-stone-600">Manage your orders, bookings, tickets, wallet, messages, and profile from one place.</p>
 
     <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        @foreach (['Orders', 'Bookings', 'Tickets', 'Wishlist', 'Wallet', 'Messages', 'Rewards', 'Profile'] as $card)
+        <a href="{{ url('/network') }}" class="rounded-3xl border border-stone-200 bg-white p-6 shadow-sm transition hover:border-gold-400">
+            <h2 class="font-semibold text-stone-900">{{ __('platform.nav.network') }}</h2>
+            <p class="mt-2 text-sm text-stone-500">{{ __('platform.nav.network_desc') }}</p>
+        </a>
+        <a href="{{ url('/chat') }}" class="rounded-3xl border border-stone-200 bg-white p-6 shadow-sm transition hover:border-gold-400">
+            <h2 class="font-semibold text-stone-900">{{ __('platform.nav.chat') }}</h2>
+            <p class="mt-2 text-sm text-stone-500">{{ __('platform.nav.chat_desc') }}</p>
+        </a>
+        @foreach (['Orders', 'Bookings', 'Tickets', 'Wishlist', 'Wallet', 'Rewards', 'Profile'] as $card)
             <div class="rounded-3xl border border-stone-200 bg-white p-6 shadow-sm">
                 <h2 class="font-semibold text-stone-900">{{ $card }}</h2>
                 <p class="mt-2 text-sm text-stone-500">Module-ready dashboard section.</p>

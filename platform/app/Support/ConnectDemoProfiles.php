@@ -2,9 +2,11 @@
 
 namespace App\Support;
 
+use Illuminate\Support\Facades\Schema;
+
 /**
- * Demo profiles shown when matchmaking tables are empty or unavailable.
- * Keeps /matchmaking and /connect from 500ing on shared hosting.
+ * Shared people directory for Network, matchmaking, and profile chat.
+ * Falls back to demo profiles when tables are missing or empty.
  */
 class ConnectDemoProfiles
 {
@@ -102,10 +104,155 @@ class ConnectDemoProfiles
     {
         foreach (self::all() as $profile) {
             if ($profile['slug'] === $slug) {
-                return $profile;
+                return $profile + ['_demo' => true];
             }
         }
 
         return null;
+    }
+
+    public static function tablesReady(): bool
+    {
+        try {
+            return Schema::hasTable('matchmaking_profiles');
+        } catch (\Throwable) {
+            return false;
+        }
+    }
+
+    /** @return array<int, array<string, mixed>> */
+    public static function publicProfiles(?string $intent = null): array
+    {
+        if (self::tablesReady()) {
+            try {
+                $query = \App\Models\MatchmakingProfile::query()
+                    ->where('is_public', true)
+                    ->where('open_to_connect', true)
+                    ->latest();
+                if ($intent !== null && $intent !== '') {
+                    $query->where('intent', $intent);
+                }
+                $rows = $query->limit(48)->get();
+                if ($rows->isNotEmpty()) {
+                    return $rows->map(fn ($row) => self::fromModel($row))->all();
+                }
+            } catch (\Throwable) {
+                // fall back to demo
+            }
+        }
+
+        $profiles = array_map(fn (array $row) => $row + ['_demo' => true], self::all());
+        if ($intent !== null && $intent !== '') {
+            $profiles = array_values(array_filter($profiles, fn ($p) => ($p['intent'] ?? '') === $intent));
+        }
+
+        return $profiles;
+    }
+
+    /** @return array<string, mixed>|null */
+    public static function resolve(string $slug): ?array
+    {
+        if (self::tablesReady()) {
+            try {
+                $row = \App\Models\MatchmakingProfile::query()->where('slug', $slug)->first();
+                if ($row) {
+                    return self::fromModel($row);
+                }
+            } catch (\Throwable) {
+                // fall back to demo
+            }
+        }
+
+        return self::find($slug);
+    }
+
+    /** @return array<string, mixed> */
+    public static function fromModel(object $profile): array
+    {
+        return [
+            'slug' => $profile->slug,
+            'display_name' => $profile->display_name,
+            'headline' => $profile->headline,
+            'bio' => $profile->bio,
+            'city' => $profile->city,
+            'age' => $profile->age,
+            'intent' => $profile->intent,
+            'interests' => $profile->interests ?? [],
+            'languages' => $profile->languages ?? [],
+            'avatar_url' => $profile->avatar_url,
+            'company' => $profile->company,
+            'role_title' => $profile->role_title,
+            '_demo' => false,
+        ];
+    }
+
+    /** @return array<string, string> */
+    public static function intents(): array
+    {
+        $cfg = config('connect.intents');
+        if (is_array($cfg) && $cfg !== []) {
+            return $cfg;
+        }
+
+        return [
+            'dating' => 'Dating',
+            'friends' => 'Friends',
+            'business' => 'Business networking',
+            'events' => 'Events & parties',
+            'travel' => 'Travel buddies',
+        ];
+    }
+
+    /** @return array{name:string,tagline:string,home:string,register:string,login:string,reels:string} */
+    public static function nexora(): array
+    {
+        $cfg = config('connect.nexora');
+        if (is_array($cfg) && ! empty($cfg['home'])) {
+            return $cfg + [
+                'name' => 'Nexora',
+                'tagline' => 'Connect. Discover. Meet.',
+                'home' => 'https://nexora.ehopn.com',
+                'register' => 'https://nexora.ehopn.com/register',
+                'login' => 'https://nexora.ehopn.com/login',
+                'reels' => 'https://nexora.ehopn.com/discover/reels',
+            ];
+        }
+
+        return [
+            'name' => 'Nexora',
+            'tagline' => 'Connect. Discover. Meet.',
+            'home' => 'https://nexora.ehopn.com',
+            'register' => 'https://nexora.ehopn.com/register',
+            'login' => 'https://nexora.ehopn.com/login',
+            'reels' => 'https://nexora.ehopn.com/discover/reels',
+        ];
+    }
+
+    /** @return array<int, array<string, mixed>> */
+    public static function demoGroups(): array
+    {
+        return [
+            [
+                'title' => 'Founder coffee · Marienplatz',
+                'description' => 'Morning espresso with builders, vendors, and EXPO guests.',
+                'intent' => 'business',
+                'city' => 'Munich',
+                'capacity' => 12,
+            ],
+            [
+                'title' => 'Opening-day tent crew',
+                'description' => 'Meet at the Bavaria statue, then hop Hofbräu and Schottenhamel.',
+                'intent' => 'friends',
+                'city' => 'Munich',
+                'capacity' => 16,
+            ],
+            [
+                'title' => 'EXPO + Wiesn circle',
+                'description' => 'Trade-show days, then tents after 5. Open to founders and operators.',
+                'intent' => 'business',
+                'city' => 'Munich',
+                'capacity' => 20,
+            ],
+        ];
     }
 }

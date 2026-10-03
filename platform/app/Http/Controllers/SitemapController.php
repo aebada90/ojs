@@ -20,6 +20,10 @@ class SitemapController extends Controller
             ['loc' => url('/jobs'), 'priority' => '0.7'],
             ['loc' => url('/properties'), 'priority' => '0.8'],
             ['loc' => url('/map'), 'priority' => '0.7'],
+            ['loc' => url('/network'), 'priority' => '0.8'],
+            ['loc' => url('/chat'), 'priority' => '0.7'],
+            ['loc' => url('/matchmaking'), 'priority' => '0.7'],
+            ['loc' => url('/connect'), 'priority' => '0.7'],
         ];
 
         return response()->view('sitemap', compact('urls'))

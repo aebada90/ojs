@@ -13,8 +13,9 @@
                 <h1 class="mt-6 font-display text-4xl font-bold sm:text-5xl">{{ __('platform.connect.title') }}</h1>
                 <p class="mt-6 max-w-xl text-lg leading-relaxed text-white/80">{{ __('platform.connect.subtitle') }}</p>
                 <div class="mt-8 flex flex-wrap gap-3">
-                    <a href="{{ route('matchmaking.index') }}" class="btn-gold">{{ __('platform.connect.cta_matchmaking') }}</a>
-                    <a href="{{ $nexora['home'] }}" target="_blank" rel="noopener noreferrer" class="inline-flex rounded-full border-2 border-white/40 px-6 py-2.5 text-sm font-bold text-white transition hover:bg-white/10">{{ __('platform.connect.cta_nexora') }}</a>
+                    <a href="{{ route('network.index') }}" class="btn-gold">{{ __('platform.connect.cta_network') }}</a>
+                    <a href="{{ route('chat.index') }}" class="inline-flex rounded-full border-2 border-white/40 px-6 py-2.5 text-sm font-bold text-white transition hover:bg-white/10">{{ __('platform.nav.chat') }}</a>
+                    <a href="{{ route('matchmaking.index') }}" class="inline-flex rounded-full border-2 border-white/40 px-6 py-2.5 text-sm font-bold text-white transition hover:bg-white/10">{{ __('platform.connect.cta_matchmaking') }}</a>
                 </div>
                 <p class="mt-5 text-sm text-white/50">{{ __('platform.connect.powered_by', ['app' => $nexora['name']]) }}</p>
             </div>
@@ -56,20 +57,20 @@
     </div>
 
     <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-        <a href="{{ route('matchmaking.people') }}" class="card-fest block p-6 transition hover:border-gold-400">
-            <p class="text-xs font-bold uppercase tracking-widest text-bavarian-500">{{ __('platform.connect.tile_match_badge') }}</p>
-            <h3 class="mt-3 font-display text-xl font-bold text-bavarian-900">{{ __('platform.connect.tile_match_title') }}</h3>
-            <p class="mt-2 text-sm text-stone-600">{{ __('platform.connect.tile_match_body') }}</p>
-        </a>
-        <a href="{{ route('matchmaking.groups.index') }}" class="card-fest block p-6 transition hover:border-gold-400">
+        <a href="{{ route('network.index') }}" class="card-fest block p-6 transition hover:border-gold-400">
             <p class="text-xs font-bold uppercase tracking-widest text-bavarian-500">{{ __('platform.connect.tile_network_badge') }}</p>
             <h3 class="mt-3 font-display text-xl font-bold text-bavarian-900">{{ __('platform.connect.tile_network_title') }}</h3>
             <p class="mt-2 text-sm text-stone-600">{{ __('platform.connect.tile_network_body') }}</p>
         </a>
-        <a href="{{ url('/meet') }}" class="card-fest block p-6 transition hover:border-gold-400">
-            <p class="text-xs font-bold uppercase tracking-widest text-bavarian-500">{{ __('platform.connect.tile_meet_badge') }}</p>
-            <h3 class="mt-3 font-display text-xl font-bold text-bavarian-900">{{ __('platform.connect.tile_meet_title') }}</h3>
-            <p class="mt-2 text-sm text-stone-600">{{ __('platform.connect.tile_meet_body') }}</p>
+        <a href="{{ route('chat.index') }}" class="card-fest block p-6 transition hover:border-gold-400">
+            <p class="text-xs font-bold uppercase tracking-widest text-bavarian-500">{{ __('platform.connect.tile_chat_badge') }}</p>
+            <h3 class="mt-3 font-display text-xl font-bold text-bavarian-900">{{ __('platform.connect.tile_chat_title') }}</h3>
+            <p class="mt-2 text-sm text-stone-600">{{ __('platform.connect.tile_chat_body') }}</p>
+        </a>
+        <a href="{{ route('matchmaking.people') }}" class="card-fest block p-6 transition hover:border-gold-400">
+            <p class="text-xs font-bold uppercase tracking-widest text-bavarian-500">{{ __('platform.connect.tile_match_badge') }}</p>
+            <h3 class="mt-3 font-display text-xl font-bold text-bavarian-900">{{ __('platform.connect.tile_match_title') }}</h3>
+            <p class="mt-2 text-sm text-stone-600">{{ __('platform.connect.tile_match_body') }}</p>
         </a>
         <a href="{{ $nexora['home'] }}" target="_blank" rel="noopener noreferrer" class="card-fest block p-6 transition hover:border-gold-400">
             <p class="text-xs font-bold uppercase tracking-widest text-bavarian-500">{{ $nexora['name'] }}</p>

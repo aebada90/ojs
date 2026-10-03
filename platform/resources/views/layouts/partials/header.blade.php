@@ -57,6 +57,8 @@
                 [
                     'title' => __('platform.nav.groups.connect'),
                     'links' => [
+                        ['href' => url('/network'), 'label' => __('platform.nav.network'), 'desc' => __('platform.nav.network_desc')],
+                        ['href' => url('/chat'), 'label' => __('platform.nav.chat'), 'desc' => __('platform.nav.chat_desc')],
                         ['href' => url('/matchmaking'), 'label' => __('platform.nav.matchmaking'), 'desc' => __('platform.nav.matchmaking_desc')],
                         ['href' => url('/meet'), 'label' => __('platform.nav.meet_people')],
                         ['href' => url('/connect'), 'label' => __('platform.nav.digital_card'), 'desc' => __('platform.nav.digital_card_desc')],
@@ -72,6 +74,7 @@
         ['href' => url('/events'), 'label' => __('platform.nav.beer_tents')],
         ['href' => url('/hotels'), 'label' => __('platform.nav.hotels')],
         ['href' => url('/rentals'), 'label' => __('platform.nav.tracht_short')],
+        ['href' => url('/network'), 'label' => __('platform.nav.network')],
     ];
 @endphp
 

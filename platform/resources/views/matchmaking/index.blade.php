@@ -11,8 +11,8 @@
         <p class="mt-5 max-w-2xl text-lg text-white/80">{{ __('platform.matchmaking.subtitle') }}</p>
         <div class="mt-8 flex flex-wrap gap-3">
             <a href="{{ route('matchmaking.people') }}" class="btn-gold">{{ __('platform.matchmaking.cta_people') }}</a>
-            <a href="{{ route('matchmaking.groups.index') }}" class="inline-flex rounded-full border-2 border-white/40 px-6 py-2.5 text-sm font-bold text-white hover:bg-white/10">{{ __('platform.matchmaking.cta_groups') }}</a>
-            <a href="{{ $nexora['register'] }}" target="_blank" rel="noopener noreferrer" class="inline-flex rounded-full border-2 border-gold-400/50 px-6 py-2.5 text-sm font-bold text-gold-200 hover:bg-gold-400/10">{{ __('platform.matchmaking.cta_nexora') }}</a>
+            <a href="{{ route('network.index') }}" class="inline-flex rounded-full border-2 border-white/40 px-6 py-2.5 text-sm font-bold text-white hover:bg-white/10">{{ __('platform.nav.network') }}</a>
+            <a href="{{ route('chat.index') }}" class="inline-flex rounded-full border-2 border-gold-400/50 px-6 py-2.5 text-sm font-bold text-gold-200 hover:bg-gold-400/10">{{ __('platform.nav.chat') }}</a>
         </div>
         <p class="mt-6 text-sm text-white/50">{{ __('platform.matchmaking.people_ready', ['count' => $peopleCount]) }}</p>
     </div>

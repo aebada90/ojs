@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Listing;
+use App\Support\ConnectDemoProfiles;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 use Modules\Marketplace\Models\Product;
@@ -25,6 +26,7 @@ class HomePage extends Component
                 ->limit(8)
                 ->get(),
             'featuredJobs' => $this->featured('job'),
+            'networkPeople' => array_slice(ConnectDemoProfiles::publicProfiles(), 0, 4),
         ]);
     }
 

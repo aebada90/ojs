@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\ConnectDemoProfiles;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -13,82 +13,35 @@ class MatchmakingController extends Controller
     public function index(): View
     {
         return view('matchmaking.index', [
-            'nexora' => $this->nexora(),
-            'intents' => $this->intents(),
-            'peopleCount' => count($this->demoProfiles()),
+            'nexora' => ConnectDemoProfiles::nexora(),
+            'intents' => ConnectDemoProfiles::intents(),
+            'peopleCount' => count(ConnectDemoProfiles::publicProfiles()),
         ]);
     }
 
     public function people(Request $request): View
     {
         $intent = $request->string('intent')->toString();
-        $profiles = $this->demoProfiles();
-        if ($intent !== '') {
-            $profiles = array_values(array_filter($profiles, fn ($p) => ($p['intent'] ?? '') === $intent));
-        }
-
-        // Prefer DB profiles when the table exists and has rows.
-        if ($this->tablesReady()) {
-            try {
-                $query = \App\Models\MatchmakingProfile::query()
-                    ->where('is_public', true)
-                    ->where('open_to_connect', true)
-                    ->latest();
-                if ($intent !== '') {
-                    $query->where('intent', $intent);
-                }
-                $rows = $query->limit(48)->get();
-                if ($rows->isNotEmpty()) {
-                    return view('matchmaking.people', [
-                        'profiles' => $rows->all(),
-                        'intent' => $intent,
-                        'intents' => $this->intents(),
-                        'nexora' => $this->nexora(),
-                        'usingDemo' => false,
-                    ]);
-                }
-            } catch (\Throwable) {
-                // fall back to demo
-            }
-        }
+        $profiles = ConnectDemoProfiles::publicProfiles($intent !== '' ? $intent : null);
 
         return view('matchmaking.people', [
             'profiles' => $profiles,
             'intent' => $intent,
-            'intents' => $this->intents(),
-            'nexora' => $this->nexora(),
-            'usingDemo' => true,
+            'intents' => ConnectDemoProfiles::intents(),
+            'nexora' => ConnectDemoProfiles::nexora(),
+            'usingDemo' => collect($profiles)->contains(fn ($p) => ($p['_demo'] ?? false) === true),
         ]);
     }
 
     public function show(string $slug): View
     {
-        $profile = null;
-        if ($this->tablesReady()) {
-            try {
-                $profile = \App\Models\MatchmakingProfile::query()->where('slug', $slug)->first();
-            } catch (\Throwable) {
-                $profile = null;
-            }
-        }
-
-        $isDemo = false;
-        if (! $profile) {
-            foreach ($this->demoProfiles() as $row) {
-                if ($row['slug'] === $slug) {
-                    $profile = $row;
-                    $isDemo = true;
-                    break;
-                }
-            }
-        }
-
-        abort_if(! $profile, 404);
+        $profile = ConnectDemoProfiles::resolve($slug);
+        abort_if($profile === null, 404);
 
         return view('matchmaking.show', [
             'profile' => $profile,
-            'nexora' => $this->nexora(),
-            'isDemo' => $isDemo,
+            'nexora' => ConnectDemoProfiles::nexora(),
+            'isDemo' => (bool) ($profile['_demo'] ?? false),
         ]);
     }
 
@@ -96,15 +49,15 @@ class MatchmakingController extends Controller
     {
         return view('matchmaking.profile-edit', [
             'profile' => $this->ensureProfileArray($request->user()),
-            'intents' => $this->intents(),
-            'nexora' => $this->nexora(),
+            'intents' => ConnectDemoProfiles::intents(),
+            'nexora' => ConnectDemoProfiles::nexora(),
         ]);
     }
 
     public function updateProfile(Request $request): RedirectResponse
     {
-        if (! $this->tablesReady()) {
-            return redirect()->away($this->nexora()['register']);
+        if (! ConnectDemoProfiles::tablesReady()) {
+            return redirect()->away(ConnectDemoProfiles::nexora()['register']);
         }
 
         $data = $request->validate([
@@ -155,13 +108,13 @@ class MatchmakingController extends Controller
             'profile' => $this->ensureProfileArray($request->user()),
             'pending' => collect(),
             'accepted' => collect(),
-            'nexora' => $this->nexora(),
+            'nexora' => ConnectDemoProfiles::nexora(),
         ]);
     }
 
     public function connect(Request $request, string $slug): RedirectResponse
     {
-        return redirect()->away($this->nexora()['register']);
+        return redirect()->route('chat.show', $slug);
     }
 
     public function accept(Request $request, string $slug): RedirectResponse
@@ -172,48 +125,6 @@ class MatchmakingController extends Controller
     public function decline(Request $request, string $slug): RedirectResponse
     {
         return back();
-    }
-
-    private function nexora(): array
-    {
-        $cfg = config('connect.nexora');
-        if (is_array($cfg) && ! empty($cfg['home'])) {
-            return $cfg;
-        }
-
-        return [
-            'name' => 'Nexora',
-            'tagline' => 'Connect. Discover. Meet.',
-            'home' => 'https://nexora.ehopn.com',
-            'register' => 'https://nexora.ehopn.com/register',
-            'login' => 'https://nexora.ehopn.com/login',
-            'reels' => 'https://nexora.ehopn.com/discover/reels',
-        ];
-    }
-
-    private function intents(): array
-    {
-        $cfg = config('connect.intents');
-        if (is_array($cfg) && $cfg !== []) {
-            return $cfg;
-        }
-
-        return [
-            'dating' => 'Dating',
-            'friends' => 'Friends',
-            'business' => 'Business networking',
-            'events' => 'Events & parties',
-            'travel' => 'Travel buddies',
-        ];
-    }
-
-    private function tablesReady(): bool
-    {
-        try {
-            return Schema::hasTable('matchmaking_profiles');
-        } catch (\Throwable) {
-            return false;
-        }
     }
 
     private function ensureProfileArray($user): array
@@ -245,95 +156,5 @@ class MatchmakingController extends Controller
         }
 
         return array_values(array_filter(array_map('trim', explode(',', $value))));
-    }
-
-    private function demoProfiles(): array
-    {
-        return [
-            [
-                'slug' => 'lena-munich',
-                'display_name' => 'Lena K.',
-                'headline' => 'First Wiesn — looking for tent buddies',
-                'bio' => 'Flying in from Berlin. Love live music, photography, and a good Maß.',
-                'city' => 'Munich',
-                'age' => 28,
-                'intent' => 'friends',
-                'interests' => ['music', 'photography', 'tents'],
-                'languages' => ['de', 'en'],
-                'avatar_url' => 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop',
-                'company' => null,
-                'role_title' => null,
-            ],
-            [
-                'slug' => 'marco-business',
-                'display_name' => 'Marco S.',
-                'headline' => 'Hospitality founder — open to networking',
-                'bio' => 'Building tourism tech. Happy to meet founders, vendors, and EXPO guests.',
-                'city' => 'Munich',
-                'age' => 34,
-                'intent' => 'business',
-                'interests' => ['startups', 'hospitality', 'ai'],
-                'languages' => ['en', 'de', 'it'],
-                'avatar_url' => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
-                'company' => 'Alpine Labs',
-                'role_title' => 'Founder',
-            ],
-            [
-                'slug' => 'sofia-travel',
-                'display_name' => 'Sofia R.',
-                'headline' => 'Solo traveler — brunch & bar crawls',
-                'bio' => 'Here for opening weekend. Looking for a friendly crew for food and nightlife.',
-                'city' => 'Munich',
-                'age' => 26,
-                'intent' => 'travel',
-                'interests' => ['food', 'nightlife', 'coffee'],
-                'languages' => ['en', 'es'],
-                'avatar_url' => 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop',
-                'company' => null,
-                'role_title' => null,
-            ],
-            [
-                'slug' => 'jonas-events',
-                'display_name' => 'Jonas W.',
-                'headline' => 'Event producer — after-parties & tents',
-                'bio' => 'Know the best after-hours spots. Always happy to share tips and connect crews.',
-                'city' => 'Munich',
-                'age' => 31,
-                'intent' => 'events',
-                'interests' => ['parties', 'dj', 'networking'],
-                'languages' => ['de', 'en'],
-                'avatar_url' => 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop',
-                'company' => 'Wiesn Nights',
-                'role_title' => 'Producer',
-            ],
-            [
-                'slug' => 'amina-dating',
-                'display_name' => 'Amina H.',
-                'headline' => 'Here for the vibes — open to meeting someone new',
-                'bio' => 'Dirndl ready. Love dancing, good conversation, and ferris-wheel views.',
-                'city' => 'Munich',
-                'age' => 29,
-                'intent' => 'dating',
-                'interests' => ['dancing', 'festivals', 'coffee'],
-                'languages' => ['en', 'de', 'fr'],
-                'avatar_url' => 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop',
-                'company' => null,
-                'role_title' => null,
-            ],
-            [
-                'slug' => 'erik-network',
-                'display_name' => 'Erik P.',
-                'headline' => 'Investor visiting MunichTech EXPO + Wiesn',
-                'bio' => 'In town for EXPO and Oktoberfest. Open to coffee chats with builders.',
-                'city' => 'Munich',
-                'age' => 38,
-                'intent' => 'business',
-                'interests' => ['venture', 'ai', 'travel'],
-                'languages' => ['en', 'sv'],
-                'avatar_url' => 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop',
-                'company' => 'Northpeak Capital',
-                'role_title' => 'Partner',
-            ],
-        ];
     }
 }

@@ -7,8 +7,10 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 use Laravel\Socialite\Facades\Socialite;
 use Throwable;
 
@@ -17,9 +19,15 @@ class SocialAuthController extends Controller
     /** @var list<string> */
     protected array $providers = ['google', 'facebook', 'apple', 'linkedin'];
 
-    public function redirect(string $provider): RedirectResponse
+    public const NEXORA_GOOGLE_CALLBACK = 'https://nexora.ehopn.com/auth/google/callback';
+
+    public function redirect(string $provider = 'google'): RedirectResponse|View
     {
         $this->validateProvider($provider);
+
+        if ($provider === 'google' && $this->googleRedirectMismatched()) {
+            return $this->googleFixView();
+        }
 
         return $this->socialite($provider)->redirect();
     }
@@ -78,56 +86,102 @@ class SocialAuthController extends Controller
         return redirect()->intended(route('dashboard'));
     }
 
-    /**
-     * Ops JSON: whether Google accepts the configured redirect URI.
-     */
+    public function googleFix(): View|RedirectResponse
+    {
+        if (! $this->googleRedirectMismatched(force: true)) {
+            return $this->socialite('google')->redirect();
+        }
+
+        return $this->googleFixView();
+    }
+
     public function googleSetupCheck(): JsonResponse
     {
-        $redirect = (string) config('services.google.redirect');
+        $redirect = $this->configuredGoogleRedirect();
         $clientId = (string) config('services.google.client_id');
-        $appUrl = rtrim((string) config('app.url'), '/');
-
-        $probe = 'https://accounts.google.com/o/oauth2/v2/auth?'.http_build_query([
-            'client_id' => $clientId,
-            'redirect_uri' => $redirect,
-            'response_type' => 'code',
-            'scope' => 'openid email profile',
-            'prompt' => 'select_account',
-        ]);
-
-        $ch = curl_init($probe);
-        curl_setopt_array($ch, [
-            CURLOPT_NOBODY => true,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => true,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_MAXREDIRS => 3,
-            CURLOPT_TIMEOUT => 15,
-        ]);
-        $headers = (string) curl_exec($ch);
-        curl_close($ch);
-
-        $mismatch = str_contains($headers, 'redirect_uri_mismatch')
-            || str_contains($headers, 'ChVyZWRpcmVjdF91cmlfbWlzbWF0Y2g');
-        $accepted = ! $mismatch && (
-            str_contains($headers, 'signin/identifier')
-            || str_contains($headers, 'oauth/legacy/consent')
-            || str_contains($headers, 'AccountChooser')
-        );
+        $mismatch = $this->googleRedirectMismatched(force: true);
 
         return response()->json([
             'client_id' => $clientId,
             'redirect_uri' => $redirect,
-            'accepted_by_google' => $accepted,
+            'accepted_by_google' => ! $mismatch,
             'redirect_uri_mismatch' => $mismatch,
             'fix_if_mismatch' => [
                 'console' => 'https://console.cloud.google.com/apis/credentials',
                 'oauth_client' => $clientId,
                 'add_authorized_redirect_uri' => $redirect,
-                'add_authorized_javascript_origin' => $appUrl,
-                'note' => 'This OAuth client currently allows https://nexora.ehopn.com/auth/google/callback only. Add the Oktoberhub redirect URI (or create a dedicated Oktoberhub OAuth client) then retry Continue with Google.',
+                'add_authorized_javascript_origin' => rtrim((string) config('app.url'), '/'),
+                'currently_authorized' => self::NEXORA_GOOGLE_CALLBACK,
             ],
         ]);
+    }
+
+    protected function googleFixView(): View
+    {
+        $clientId = (string) config('services.google.client_id');
+        $redirect = $this->configuredGoogleRedirect();
+        $appUrl = rtrim((string) config('app.url'), '/');
+
+        return view('auth.google-fix', [
+            'clientId' => $clientId,
+            'redirectUri' => $redirect,
+            'origin' => $appUrl,
+            'consoleUrl' => 'https://console.cloud.google.com/apis/credentials/oauthclient/'.$clientId.'?project=148156861979',
+            'credentialsUrl' => 'https://console.cloud.google.com/apis/credentials?project=148156861979',
+            'nexoraCallback' => self::NEXORA_GOOGLE_CALLBACK,
+        ]);
+    }
+
+    protected function googleRedirectMismatched(bool $force = false): bool
+    {
+        $ttl = $force ? 0 : 45;
+        $key = 'oauth.google.redirect_mismatch.'.$this->configuredGoogleRedirect();
+
+        $probe = function (): bool {
+            $clientId = (string) config('services.google.client_id');
+            $redirect = $this->configuredGoogleRedirect();
+            if ($clientId === '' || $redirect === '') {
+                return true;
+            }
+
+            $url = 'https://accounts.google.com/o/oauth2/v2/auth?'.http_build_query([
+                'client_id' => $clientId,
+                'redirect_uri' => $redirect,
+                'response_type' => 'code',
+                'scope' => 'openid email profile',
+                'prompt' => 'select_account',
+            ]);
+
+            $ch = curl_init($url);
+            curl_setopt_array($ch, [
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_HEADER => true,
+                CURLOPT_NOBODY => false,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_MAXREDIRS => 4,
+                CURLOPT_TIMEOUT => 12,
+                CURLOPT_USERAGENT => 'Oktoberhub-OAuth-Check',
+            ]);
+            $body = (string) curl_exec($ch);
+            curl_close($ch);
+
+            return str_contains($body, 'redirect_uri_mismatch')
+                || str_contains($body, 'ChVyZWRpcmVjdF91cmlfbWlzbWF0Y2g');
+        };
+
+        if ($ttl <= 0) {
+            $mismatch = $probe();
+            Cache::put($key, $mismatch, 45);
+
+            return $mismatch;
+        }
+
+        return (bool) Cache::remember($key, $ttl, $probe);
+    }
+
+    protected function configuredGoogleRedirect(): string
+    {
+        return (string) config('services.google.redirect');
     }
 
     protected function socialite(string $provider): mixed

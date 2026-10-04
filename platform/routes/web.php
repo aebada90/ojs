@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CompetitionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocaleController;
@@ -30,6 +31,14 @@ Route::redirect('/connectapp', '/connect', 301);
 Route::get('/chat', [ProfileChatController::class, 'index'])->name('chat.index');
 Route::get('/chat/{slug}', [ProfileChatController::class, 'show'])->name('chat.show');
 Route::post('/chat/{slug}', [ProfileChatController::class, 'send'])->name('chat.send');
+
+Route::get('/competition', [CompetitionController::class, 'index'])->name('competition.index');
+Route::get('/competition/enter', [CompetitionController::class, 'enterForm'])->name('competition.enter');
+Route::post('/competition/enter', [CompetitionController::class, 'enter'])->name('competition.enter.store');
+Route::get('/competition/{slug}', [CompetitionController::class, 'show'])->name('competition.show');
+Route::post('/competition/{slug}/vote', [CompetitionController::class, 'vote'])->name('competition.vote');
+Route::redirect('/dirndl', '/competition', 301);
+Route::redirect('/dirndl-competition', '/competition', 301);
 
 Route::prefix('matchmaking')->name('matchmaking.')->group(function (): void {
     Route::get('/', [MatchmakingController::class, 'index'])->name('index');

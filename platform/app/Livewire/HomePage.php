@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Listing;
 use App\Support\ConnectDemoProfiles;
+use App\Support\DirndlContest;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 use Modules\Marketplace\Models\Product;
@@ -27,6 +28,7 @@ class HomePage extends Component
                 ->get(),
             'featuredJobs' => $this->featured('job'),
             'networkPeople' => array_slice(ConnectDemoProfiles::publicProfiles(), 0, 4),
+            'dirndlContestants' => array_slice(DirndlContest::contestants(), 0, 4),
         ]);
     }
 

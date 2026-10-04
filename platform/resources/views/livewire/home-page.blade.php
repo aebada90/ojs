@@ -69,6 +69,36 @@
     @include('components.home.section-grid', ['id' => 'experiences', 'title' => __('platform.sections.experiences.title'), 'subtitle' => __('platform.sections.experiences.subtitle'), 'items' => $featuredExperiences, 'type' => 'experience'])
     @include('components.home.section-grid', ['id' => 'restaurants', 'title' => __('platform.sections.restaurants.title'), 'subtitle' => __('platform.sections.restaurants.subtitle'), 'items' => $featuredRestaurants, 'type' => 'restaurant', 'alt' => true])
     @include('components.home.section-grid', ['id' => 'events', 'title' => __('platform.sections.events.title'), 'subtitle' => __('platform.sections.events.subtitle'), 'items' => $featuredEvents, 'type' => 'event'])
+
+    {{-- Dirndl competition --}}
+    <section id="competition" class="bg-cream py-20">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                    <span class="inline-block rounded-full bg-gold-100 px-4 py-1 text-xs font-bold uppercase tracking-widest text-beer">{{ __('platform.competition.badge') }}</span>
+                    <h2 class="section-heading mt-4">{{ __('platform.sections.competition.title') }}</h2>
+                    <p class="section-subheading">{{ __('platform.sections.competition.subtitle') }}</p>
+                </div>
+                <a href="{{ url('/competition') }}" class="btn-gold">{{ __('platform.competition.cta_vote') }}</a>
+            </div>
+            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                @foreach ($dirndlContestants as $person)
+                    <a href="{{ route('competition.show', $person['slug']) }}" class="card-fest block overflow-hidden">
+                        <div class="relative aspect-[3/4] overflow-hidden bg-bavarian-100">
+                            <img src="{{ $person['photo'] }}" alt="{{ $person['name'] }}" class="h-full w-full object-cover" loading="lazy">
+                            <span class="absolute left-3 top-3 rounded-full bg-beer/80 px-2.5 py-1 text-xs font-bold text-gold-300">#{{ $person['rank'] }}</span>
+                        </div>
+                        <div class="p-4">
+                            <p class="font-semibold text-bavarian-900">{{ $person['name'] }}</p>
+                            <p class="mt-1 text-sm text-stone-600">{{ $person['city'] }}</p>
+                            <p class="mt-3 text-xs font-bold uppercase tracking-wider text-gold-700">{{ __('platform.competition.vote_button') }} →</p>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
     @include('components.home.section-grid', ['id' => 'jobs', 'title' => __('platform.sections.jobs.title'), 'subtitle' => __('platform.sections.jobs.subtitle'), 'items' => $featuredJobs, 'type' => 'job', 'alt' => true])
     @include('components.home.section-grid', ['id' => 'properties', 'title' => __('platform.sections.properties.title'), 'subtitle' => __('platform.sections.properties.subtitle'), 'items' => $featuredProperties, 'type' => 'property'])
 

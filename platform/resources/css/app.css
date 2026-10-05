@@ -19,6 +19,7 @@
     --color-bavarian-700: #003d6e;
     --color-bavarian-800: #002a4d;
     --color-bavarian-900: #001829;
+    --color-bavarian-950: #000d18;
 
     --color-gold-50: #fffbeb;
     --color-gold-100: #fef3c7;
@@ -131,4 +132,46 @@
 
 .countdown-label {
     @apply mt-1.5 block text-[10px] font-bold uppercase tracking-[0.14em] text-white/80 sm:text-[11px];
+}
+
+.chip {
+    @apply rounded-full border border-bavarian-200 bg-white px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-bavarian-700 transition hover:border-gold-400 hover:text-gold-700;
+}
+
+.chip-active {
+    @apply rounded-full border border-gold-400 bg-gold-400 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-beer shadow-sm;
+}
+
+.status-dot {
+    @apply inline-block h-2 w-2 rounded-full;
+}
+
+.status-at_wiesn {
+    @apply bg-gold-400 shadow-[0_0_0_3px_rgba(245,184,0,0.25)];
+    animation: pulse-dot 1.6s ease-in-out infinite;
+}
+
+.status-online {
+    @apply bg-emerald-500;
+}
+
+.status-open_to_meet {
+    @apply bg-sky-500;
+}
+
+.status-traveling {
+    @apply bg-violet-500;
+}
+
+.social-chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-bavarian-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-bavarian-800 transition hover:border-gold-400 hover:text-gold-700;
+}
+
+.social-chip-sm {
+    @apply px-2 py-1;
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.55; transform: scale(1.25); }
 }

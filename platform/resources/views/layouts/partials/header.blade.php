@@ -59,6 +59,7 @@
                     'title' => __('platform.nav.groups.connect'),
                     'links' => [
                         ['href' => url('/network'), 'label' => __('platform.nav.network'), 'desc' => __('platform.nav.network_desc')],
+                        ['href' => url('/network/create'), 'label' => __('platform.network.cta_create')],
                         ['href' => url('/chat'), 'label' => __('platform.nav.chat'), 'desc' => __('platform.nav.chat_desc')],
                         ['href' => url('/competition'), 'label' => __('platform.nav.competition'), 'desc' => __('platform.nav.competition_desc')],
                         ['href' => url('/matchmaking'), 'label' => __('platform.nav.matchmaking'), 'desc' => __('platform.nav.matchmaking_desc')],

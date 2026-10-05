@@ -18,6 +18,9 @@ class ProfileChatController extends Controller
             'threads' => ProfileChatStore::inbox($owner),
             'people' => ConnectDemoProfiles::publicProfiles(),
             'nexora' => ConnectDemoProfiles::nexora(),
+            'intents' => ConnectDemoProfiles::intents(),
+            'relationships' => ConnectDemoProfiles::relationships(),
+            'statuses' => ConnectDemoProfiles::statuses(),
         ]);
     }
 

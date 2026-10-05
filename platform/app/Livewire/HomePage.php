@@ -27,8 +27,11 @@ class HomePage extends Component
                 ->limit(8)
                 ->get(),
             'featuredJobs' => $this->featured('job'),
-            'networkPeople' => array_slice(ConnectDemoProfiles::publicProfiles(), 0, 4),
+            'networkPeople' => array_slice(ConnectDemoProfiles::publicProfiles(), 0, 8),
             'dirndlContestants' => array_slice(DirndlContest::contestants(), 0, 4),
+            'intents' => ConnectDemoProfiles::intents(),
+            'relationships' => ConnectDemoProfiles::relationships(),
+            'statuses' => ConnectDemoProfiles::statuses(),
         ]);
     }
 

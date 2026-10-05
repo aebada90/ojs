@@ -24,6 +24,8 @@ Route::get('/meetup', [PartnerController::class, 'dating'])->name('partners.dati
 Route::redirect('/dating', '/meetup', 301);
 Route::get('/connect', [PartnerController::class, 'connect'])->name('partners.connect');
 Route::get('/network', [NetworkController::class, 'index'])->name('network.index');
+Route::get('/network/create', [NetworkController::class, 'create'])->name('network.create');
+Route::post('/network/create', [NetworkController::class, 'store'])->name('network.store');
 Route::redirect('/networking', '/network', 301);
 Route::redirect('/digital-card', '/connect', 301);
 Route::redirect('/connectapp', '/connect', 301);

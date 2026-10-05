@@ -45,7 +45,12 @@
     <p class="mt-2 text-sm text-stone-500">{{ __('platform.chat.people_sub') }}</p>
     <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         @foreach ($people as $profile)
-            @include('network.partials.person-card', ['profile' => $profile, 'intents' => config('connect.intents', [])])
+            @include('network.partials.person-card', [
+                'profile' => $profile,
+                'intents' => $intents ?? config('connect.intents', []),
+                'relationships' => $relationships ?? [],
+                'statuses' => $statuses ?? [],
+            ])
         @endforeach
     </div>
 </div>

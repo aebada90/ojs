@@ -14,6 +14,10 @@ class NetworkChatTest extends TestCase
         $response->assertSee('Network', false);
         $response->assertSee('Lena K.', false);
         $response->assertSee('/chat/lena-munich', false);
+        $response->assertSee('Klara V.', false);
+        $response->assertSee('Tom B.', false);
+        $response->assertSee('instagram.com/lena.at.wiesn', false);
+        $response->assertSee('Create your profile', false);
     }
 
     public function test_networking_redirects_to_network(): void

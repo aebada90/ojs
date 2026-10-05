@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Support\ConnectDemoProfiles;
+use App\Support\MemberProfileStore;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -26,8 +27,11 @@ class MatchmakingController extends Controller
 
         return view('matchmaking.people', [
             'profiles' => $profiles,
+            'allProfiles' => ConnectDemoProfiles::publicProfiles(),
             'intent' => $intent,
             'intents' => ConnectDemoProfiles::intents(),
+            'relationships' => ConnectDemoProfiles::relationships(),
+            'statuses' => ConnectDemoProfiles::statuses(),
             'nexora' => ConnectDemoProfiles::nexora(),
             'usingDemo' => collect($profiles)->contains(fn ($p) => ($p['_demo'] ?? false) === true),
         ]);
@@ -41,25 +45,21 @@ class MatchmakingController extends Controller
         return view('matchmaking.show', [
             'profile' => $profile,
             'nexora' => ConnectDemoProfiles::nexora(),
+            'intents' => ConnectDemoProfiles::intents(),
+            'relationships' => ConnectDemoProfiles::relationships(),
+            'statuses' => ConnectDemoProfiles::statuses(),
+            'socials' => ConnectDemoProfiles::socialLinks($profile),
             'isDemo' => (bool) ($profile['_demo'] ?? false),
         ]);
     }
 
-    public function editProfile(Request $request): View
+    public function editProfile(Request $request): RedirectResponse|View
     {
-        return view('matchmaking.profile-edit', [
-            'profile' => $this->ensureProfileArray($request->user()),
-            'intents' => ConnectDemoProfiles::intents(),
-            'nexora' => ConnectDemoProfiles::nexora(),
-        ]);
+        return redirect()->route('network.create');
     }
 
     public function updateProfile(Request $request): RedirectResponse
     {
-        if (! ConnectDemoProfiles::tablesReady()) {
-            return redirect()->away(ConnectDemoProfiles::nexora()['register']);
-        }
-
         $data = $request->validate([
             'display_name' => ['required', 'string', 'max:80'],
             'headline' => ['nullable', 'string', 'max:140'],
@@ -71,12 +71,28 @@ class MatchmakingController extends Controller
             'languages' => ['nullable', 'string', 'max:120'],
             'company' => ['nullable', 'string', 'max:120'],
             'role_title' => ['nullable', 'string', 'max:120'],
+            'instagram' => ['nullable', 'string', 'max:80'],
+            'tiktok' => ['nullable', 'string', 'max:80'],
+            'website' => ['nullable', 'url', 'max:255'],
             'linkedin_url' => ['nullable', 'url', 'max:255'],
             'nexora_url' => ['nullable', 'url', 'max:255'],
-            'avatar_url' => ['nullable', 'url', 'max:255'],
+            'avatar_url' => ['nullable', 'url', 'max:500'],
+            'relationship' => ['nullable', 'in:single,taken,open,prefer_not'],
+            'looking_for' => ['nullable', 'in:dating,friends,business,events,travel'],
+            'status' => ['nullable', 'in:at_wiesn,online,open_to_meet,traveling'],
+            'status_quote' => ['nullable', 'string', 'max:140'],
             'is_public' => ['nullable', 'boolean'],
             'open_to_connect' => ['nullable', 'boolean'],
         ]);
+
+        $data['is_public'] = $request->boolean('is_public', true);
+        $data['open_to_connect'] = $request->boolean('open_to_connect', true);
+        $saved = MemberProfileStore::save($request, $data);
+
+        if (! ConnectDemoProfiles::tablesReady()) {
+            return redirect()->route('matchmaking.show', $saved['slug'])
+                ->with('success', __('platform.profiles.saved'));
+        }
 
         $profile = \App\Models\MatchmakingProfile::query()->firstOrCreate(
             ['user_id' => $request->user()->id],

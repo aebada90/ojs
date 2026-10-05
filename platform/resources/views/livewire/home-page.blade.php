@@ -112,23 +112,18 @@
             </div>
             <div class="flex flex-wrap gap-3">
                 <a href="{{ url('/network') }}" class="btn-gold">{{ __('platform.nav.network') }}</a>
+                <a href="{{ route('network.create') }}" class="inline-flex rounded-full border-2 border-gold-400 px-5 py-2.5 text-sm font-bold text-beer hover:bg-gold-50">{{ __('platform.network.cta_create') }}</a>
                 <a href="{{ url('/chat') }}" class="inline-flex rounded-full border-2 border-bavarian-300 px-5 py-2.5 text-sm font-bold text-bavarian-700 hover:border-gold-400">{{ __('platform.nav.chat') }}</a>
             </div>
         </div>
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             @foreach ($networkPeople as $profile)
-                <a href="{{ route('chat.show', $profile['slug']) }}" class="card-fest block overflow-hidden">
-                    <div class="aspect-[16/10] overflow-hidden bg-bavarian-100">
-                        @if (!empty($profile['avatar_url']))
-                            <img src="{{ $profile['avatar_url'] }}" alt="{{ $profile['display_name'] }}" class="h-full w-full object-cover" loading="lazy">
-                        @endif
-                    </div>
-                    <div class="p-4">
-                        <p class="font-semibold text-bavarian-900">{{ $profile['display_name'] }}</p>
-                        <p class="mt-1 line-clamp-2 text-sm text-stone-600">{{ $profile['headline'] }}</p>
-                        <p class="mt-3 text-xs font-bold uppercase tracking-wider text-gold-700">{{ __('platform.network.chat') }} →</p>
-                    </div>
-                </a>
+                @include('network.partials.person-card', [
+                    'profile' => $profile,
+                    'intents' => $intents,
+                    'relationships' => $relationships,
+                    'statuses' => $statuses,
+                ])
             @endforeach
         </div>
     </section>

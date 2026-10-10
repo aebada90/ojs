@@ -64,7 +64,7 @@ class MunichFestivals
                 'ends_at' => "{$year}-04-03",
                 'location' => 'Nockherberg & beer gardens',
                 'blurb' => __('platform.festivals.items.starkbierfest.blurb'),
-                'image' => 'https://images.unsplash.com/photo-1436076863939-06817fe63948?auto=format&fit=crop&w=1200&h=800&q=80',
+                'image' => 'https://images.unsplash.com/photo-1608270586620-248524c67de9?auto=format&fit=crop&w=1200&h=800&q=80',
                 'accent' => 'beer',
                 'tags' => ['beer', 'tradition', 'spring'],
             ],

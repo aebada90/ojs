@@ -84,23 +84,31 @@
     ];
 @endphp
 
-<header
-    class="sticky top-0 z-[110] border-b border-bavarian-800 bg-bavarian-900"
+{{-- Alpine scope wraps sticky bar + fixed drawer so the menu is not trapped by sticky. --}}
+<div
+    class="relative z-[110]"
     x-data="{
         mobileOpen: false,
         openMenu: null,
         openSection: '',
-        close() { this.mobileOpen = false; this.openMenu = null; this.openSection = ''; },
+        close() {
+            this.mobileOpen = false;
+            this.openMenu = null;
+            this.openSection = '';
+            this.syncBody();
+        },
         toggleSection(id) { this.openSection = this.openSection === id ? '' : id; },
         openDesktop(id) { this.openMenu = id; },
-        closeDesktop() { this.openMenu = null; }
+        closeDesktop() { this.openMenu = null; },
+        syncBody() {
+            document.documentElement.classList.toggle('mobile-nav-open', this.mobileOpen);
+            document.body.classList.toggle('overflow-hidden', this.mobileOpen);
+        }
     }"
-    x-effect="
-        document.documentElement.classList.toggle('mobile-nav-open', mobileOpen);
-        document.body.classList.toggle('overflow-hidden', mobileOpen);
-    "
+    x-init="$watch('mobileOpen', () => syncBody())"
     @keydown.escape.window="close()"
 >
+<header class="sticky top-0 z-[111] border-b border-bavarian-800 bg-bavarian-900">
     <div class="relative mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
         <a href="{{ url('/') }}" class="flex min-w-0 items-center gap-2.5" @click="close()">
             <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gold-400 text-lg text-beer">🍺</span>
@@ -176,7 +184,7 @@
             <button
                 type="button"
                 class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/15 text-white transition hover:bg-white/10 lg:hidden"
-                @click="mobileOpen = !mobileOpen; openMenu = null"
+                @click="mobileOpen = !mobileOpen; openMenu = null; syncBody()"
                 :aria-expanded="mobileOpen ? 'true' : 'false'"
                 aria-controls="mobile-nav"
                 aria-label="{{ __('platform.nav.menu') }}"
@@ -189,15 +197,15 @@
                 </svg>
             </button>
         </div>
-    </div>
+</header>
 
-    {{-- Mobile drawer --}}
+    {{-- Fixed to the viewport (sibling of sticky header, not inside it). --}}
     <div
         id="mobile-nav"
         x-show="mobileOpen"
         x-cloak
         x-transition.opacity.duration.200ms
-        class="fixed inset-0 z-[100] lg:hidden"
+        class="fixed inset-0 z-[200] lg:hidden"
         role="dialog"
         aria-modal="true"
         aria-label="{{ __('platform.nav.main') }}"
@@ -205,7 +213,7 @@
         <div class="absolute inset-0 bg-beer/80" @click="close()"></div>
 
         <div
-            class="absolute inset-x-0 bottom-0 top-[3.75rem] flex flex-col overflow-hidden border-t border-gold-400/20 bg-bavarian-900 shadow-2xl"
+            class="absolute inset-x-0 bottom-0 top-16 flex flex-col overflow-hidden border-t border-gold-400/20 bg-bavarian-900 shadow-2xl"
             x-show="mobileOpen"
             x-transition:enter="transition transform ease-out duration-200"
             x-transition:enter-start="translate-y-4 opacity-0"
@@ -333,4 +341,4 @@
             </div>
         </div>
     </div>
-</header>
+</div>

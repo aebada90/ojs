@@ -1,24 +1,26 @@
 @php
     $newsItems = [];
-    if (class_exists(\App\Services\OktoberfestNewsService::class)) {
-        try {
+    try {
+        if (class_exists(\App\Services\FestivalNewsService::class)) {
+            $newsItems = app(\App\Services\FestivalNewsService::class)->marqueeItems(app()->getLocale(), 28);
+        } elseif (class_exists(\App\Services\OktoberfestNewsService::class)) {
             $newsItems = app(\App\Services\OktoberfestNewsService::class)->marqueeItems(app()->getLocale(), 28);
-        } catch (\Throwable) {
-            $newsItems = [];
         }
+    } catch (\Throwable) {
+        $newsItems = [];
     }
 
     // Pace by content length so more headlines don't fly by faster.
-    $durationSeconds = max(160, (int) (count($newsItems) * 10));
+    $durationSeconds = max(140, (int) (count($newsItems) * 12));
 
     $newsAria = __('platform.news.aria');
     $newsBadge = __('platform.news.badge');
     $newsBadgeShort = __('platform.news.badge_short');
     if ($newsAria === 'platform.news.aria') {
-        $newsAria = app()->getLocale() === 'de' ? 'Oktoberfest Nachrichten-Ticker' : 'Oktoberfest news ticker';
+        $newsAria = app()->getLocale() === 'de' ? 'Münchner Festival-Nachrichten' : 'Munich festival news ticker';
     }
     if ($newsBadge === 'platform.news.badge') {
-        $newsBadge = 'Wiesn News';
+        $newsBadge = 'Festival News';
     }
     if ($newsBadgeShort === 'platform.news.badge_short') {
         $newsBadgeShort = 'News';

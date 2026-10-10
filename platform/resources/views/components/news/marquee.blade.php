@@ -26,7 +26,7 @@
 @endphp
 
 @if (count($newsItems) > 0)
-    <div class="news-marquee relative z-[90] border-b border-white/10 bg-bavarian-900 text-white" role="region" aria-label="{{ $newsAria }}">
+    <div class="news-marquee relative z-40 border-b border-white/10 bg-bavarian-900 text-white" role="region" aria-label="{{ $newsAria }}">
         <div class="flex items-stretch">
             <div class="news-marquee-badge flex shrink-0 items-center bg-gold-500 px-2.5 text-[9px] font-bold uppercase tracking-[0.14em] text-beer sm:px-3 sm:text-[10px]">
                 <span class="hidden sm:inline">{{ $newsBadge }}</span>

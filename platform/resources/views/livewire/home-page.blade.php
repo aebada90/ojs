@@ -20,7 +20,7 @@
                 </p>
                 <div class="mt-8 flex flex-wrap gap-4">
                     <a href="#planner" class="btn-gold">{{ __('platform.hero.cta_planner') }}</a>
-                    <a href="{{ route('search.results') }}" class="btn-outline-light">{{ __('platform.hero.cta_explore') }}</a>
+                    <a href="{{ route('festivals.index') }}" class="btn-outline-light">{{ __('platform.hero.cta_explore') }}</a>
                 </div>
 
                 {{-- Quick stats --}}
@@ -48,6 +48,39 @@
             <svg class="absolute bottom-0 w-full text-cream" viewBox="0 0 1440 60" preserveAspectRatio="none">
                 <path fill="currentColor" d="M0,30 C360,60 720,0 1080,30 C1260,45 1380,50 1440,40 L1440,60 L0,60 Z"/>
             </svg>
+        </div>
+    </section>
+
+    {{-- Munich Festivals 2027 --}}
+    <section id="festivals" class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+        <div class="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+                <span class="inline-block rounded-full bg-gold-100 px-4 py-1 text-xs font-bold uppercase tracking-widest text-beer">{{ __('platform.festivals.badge', ['year' => $festivalYear]) }}</span>
+                <h2 class="section-heading mt-4">{{ __('platform.sections.festivals.title') }}</h2>
+                <p class="section-subheading">{{ __('platform.sections.festivals.subtitle') }}</p>
+            </div>
+            <a href="{{ route('festivals.index') }}" class="btn-gold">{{ __('platform.festivals.cta_calendar') }}</a>
+        </div>
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            @foreach ($munichFestivals as $festival)
+                <a href="{{ route('festivals.show', $festival['slug']) }}" class="card-fest group block overflow-hidden">
+                    <div class="relative aspect-[16/10] overflow-hidden bg-bavarian-100">
+                        <img src="{{ $festival['image'] }}" alt="{{ $festival['name'] }}" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" loading="lazy">
+                        <span class="absolute left-3 top-3 rounded-full bg-beer/80 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-gold-300">{{ $festival['season'] }}</span>
+                    </div>
+                    <div class="p-4">
+                        <p class="font-semibold text-bavarian-900">{{ $festival['name'] }}</p>
+                        <p class="mt-1 text-xs font-semibold uppercase tracking-wider text-gold-700">{{ $festival['dates_label'] }}</p>
+                        <p class="mt-2 line-clamp-2 text-sm text-stone-600">{{ $festival['blurb'] }}</p>
+                    </div>
+                </a>
+            @endforeach
+        </div>
+        <div class="mt-10 rounded-3xl border border-bavarian-100 bg-cream px-6 py-8 text-center">
+            <p class="text-sm font-semibold uppercase tracking-wider text-gold-700">{{ __('platform.countdown.label') }}</p>
+            <div class="mt-4 flex justify-center">
+                <x-interactive.countdown :target="$oktoberfestOpensAt" />
+            </div>
         </div>
     </section>
 

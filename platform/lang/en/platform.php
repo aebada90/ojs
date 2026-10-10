@@ -1,23 +1,25 @@
 <?php
 
 return [
-    'name' => 'Oktoberfest AI',
-    'tagline' => 'The Ultimate AI-Powered Tourism & Festival Ecosystem',
-    'tagline_short' => 'AI Tourism & Festival OS',
+    'name' => 'Oktoberhub',
+    'tagline' => 'Munich Festivals 2027 — hotels, tents, markets, and AI trip planning',
+    'tagline_short' => 'Munich Festival OS 2027',
 
     'nav' => [
         'main' => 'Main menu',
         'menu' => 'Open menu',
         'hotels' => 'Hotels',
-        'hotels_near' => 'Hotels near Wiesn',
+        'hotels_near' => 'Hotels near Theresienwiese',
         'apartments' => 'Apartments & Homes',
         'rentals' => 'Rentals',
         'tracht' => 'Tracht & Rentals',
         'tracht_short' => 'Tracht',
         'marketplace' => 'Bavarian Shop',
         'events' => 'Events',
+        'festivals' => 'Festivals 2027',
+        'festivals_desc' => 'Oktoberfest, Frühlingsfest, Starkbierfest, Tollwood & Christmas markets',
         'beer_tents' => 'Beer Tents',
-        'event_calendar' => 'Event Calendar',
+        'event_calendar' => 'Festival Calendar',
         'parties' => 'Parties',
         'nightlife' => 'Nightlife',
         'restaurants' => 'Restaurants',
@@ -147,11 +149,11 @@ return [
     ],
 
     'competition' => [
-        'page_title' => 'Best Dirndl 2026',
-        'page_subtitle' => 'Vote online for the best woman in a dirndl at Oktoberfest.',
+        'page_title' => 'Best Dirndl 2027',
+        'page_subtitle' => 'Vote online for the best woman in a dirndl at Oktoberfest 2027.',
         'badge' => 'Competition',
         'title' => 'Best woman in a Dirndl',
-        'subtitle' => 'Oktoberfest Tracht contest — browse the contestants and cast your vote online. One vote per visitor. You can change it until the Wiesn ends.',
+        'subtitle' => 'Oktoberfest 2027 Tracht contest — browse the contestants and cast your vote online. One vote per visitor. You can change it until the Wiesn ends.',
         'cta_vote' => 'Vote now',
         'cta_enter' => 'Enter the contest',
         'votes_cast' => ':count votes cast so far',
@@ -262,24 +264,24 @@ return [
     ],
 
     'hero' => [
-        'badge' => 'Oktoberfest 2026 • Munich',
+        'badge' => 'Munich Festivals 2027',
         'title' => 'Discover. Book. Celebrate.',
-        'title_highlight' => 'All in one AI platform.',
-        'subtitle' => 'Hotels, rentals, marketplace, events, restaurants, experiences, jobs, and a live Digital Twin map — powered by AI for the world\'s greatest festivals and tourism destinations.',
-        'cta_planner' => 'Plan My Trip with AI',
-        'cta_explore' => 'Explore Everything',
+        'title_highlight' => 'Every Munich festival season.',
+        'subtitle' => 'Oktoberfest, Frühlingsfest, Starkbierfest, Tollwood, Auer Dult, and Christkindlmarkt — hotels, Tracht, tickets, networking, and AI trip planning for Munich 2027.',
+        'cta_planner' => 'Plan My 2027 Trip',
+        'cta_explore' => 'Browse Festivals',
         'stats' => [
+            ['value' => '7', 'label' => 'Festival seasons'],
             ['value' => '500+', 'label' => 'Hotels'],
-            ['value' => '1.2k', 'label' => 'Vendors'],
-            ['value' => '50k', 'label' => 'Events'],
+            ['value' => '2027', 'label' => 'Wiesn year'],
         ],
     ],
 
     'planner' => [
         'title' => 'AI Trip Planner',
-        'subtitle' => 'Personalized itineraries, restaurant picks, and festival tips in seconds.',
-        'placeholder' => 'Plan a 3-day Munich trip with hotels and beer tours...',
-        'empty' => 'Ask me to plan your Oktoberfest trip, recommend hotels, or find the best beer tents.',
+        'subtitle' => 'Plan Frühlingsfest, Oktoberfest 2027, Tollwood, or Christmas markets in seconds.',
+        'placeholder' => 'Plan 4 days around Oktoberfest 2027 with a hotel near Theresienwiese...',
+        'empty' => 'Ask me to plan Frühlingsfest, Oktoberfest 2027, Tollwood, or Christkindlmarkt — hotels, tents, and markets.',
         'send' => 'Ask AI',
     ],
 
@@ -325,8 +327,12 @@ return [
             'subtitle' => 'Browse profiles visiting Munich and start a conversation.',
         ],
         'competition' => [
-            'title' => 'Best Dirndl 2026',
-            'subtitle' => 'Vote online for the best woman in a dirndl this Wiesn.',
+            'title' => 'Best Dirndl 2027',
+            'subtitle' => 'Vote online for the best woman in a dirndl at Oktoberfest 2027.',
+        ],
+        'festivals' => [
+            'title' => 'Munich Festivals 2027',
+            'subtitle' => 'From Starkbierfest to Christkindlmarkt — one calendar for the whole year.',
         ],
         'models' => [
             'title' => 'Featured Models',
@@ -435,17 +441,90 @@ return [
     ],
 
     'news' => [
-        'aria' => 'Oktoberfest news ticker',
-        'badge' => 'Wiesn News',
+        'aria' => 'Munich festival news ticker',
+        'badge' => 'Festival News',
         'badge_short' => 'News',
     ],
 
     'countdown' => [
-        'label' => 'Countdown to Oktoberfest 2026',
+        'label' => 'Countdown to Oktoberfest 2027',
         'days' => 'Days',
         'hours' => 'Hours',
         'minutes' => 'Min',
         'seconds' => 'Sec',
+    ],
+
+    'festivals' => [
+        'page_title' => 'Munich Festivals :year',
+        'page_subtitle' => 'Oktoberfest, Frühlingsfest, Starkbierfest, Tollwood, Auer Dult, and Christkindlmarkt — plan the whole Munich year.',
+        'badge' => 'Season :year',
+        'title' => 'Munich festivals for :year',
+        'subtitle' => 'One hub for every major Munich festival season — stay, Tracht, meet people, and book before the crowds.',
+        'cta_calendar' => 'Open 2027 calendar',
+        'next_up' => 'Next up',
+        'stat_seasons' => 'Seasons',
+        'stat_festivals' => 'Festivals',
+        'stat_wiesn' => 'Oktoberfest',
+        'grid_title' => ':year festival calendar',
+        'grid_subtitle' => 'Tap a festival to plan hotels, Tracht, and meetups.',
+        'view' => 'Open festival',
+        'countdown_title' => 'Oktoberfest :year opens',
+        'countdown_subtitle' => '18 September – 3 October 2027 on the Theresienwiese.',
+        'back' => 'All Munich festivals',
+        'cta_stay' => 'Find hotels',
+        'cta_meet' => 'Meet people',
+        'more_title' => 'More Munich festivals',
+        'seasons' => [
+            'spring' => 'Spring',
+            'summer' => 'Summer',
+            'autumn' => 'Autumn',
+            'winter' => 'Winter',
+            'year_round' => 'Year-round',
+        ],
+        'items' => [
+            'starkbierfest' => [
+                'name' => 'Starkbierfest',
+                'short' => 'Starkbierfest',
+                'dates' => '12 Mar – 3 Apr 2027',
+                'blurb' => 'Strong-beer season at Nockherberg and Munich beer gardens — the first big spring celebration.',
+            ],
+            'fruehlingsfest' => [
+                'name' => 'Frühlingsfest',
+                'short' => 'Frühlingsfest',
+                'dates' => '16 Apr – 2 May 2027',
+                'blurb' => 'Munich’s spring fair on the Theresienwiese — rides, tents, and Tracht before Oktoberfest.',
+            ],
+            'auer_dult' => [
+                'name' => 'Auer Dult',
+                'short' => 'Auer Dult',
+                'dates' => 'Three markets in 2027',
+                'blurb' => 'Mariahilfplatz folk markets for crockery, antiques, and local food — Maidult, Jakobidult, Kirchweihdult.',
+            ],
+            'tollwood_summer' => [
+                'name' => 'Tollwood Summer Festival',
+                'short' => 'Tollwood Summer',
+                'dates' => '17 Jun – 18 Jul 2027',
+                'blurb' => 'Music, world cuisine, and culture under the tents at Olympiapark.',
+            ],
+            'oktoberfest' => [
+                'name' => 'Oktoberfest / Wiesn',
+                'short' => 'Oktoberfest',
+                'dates' => '18 Sep – 3 Oct 2027',
+                'blurb' => 'The world’s biggest folk festival — tents, Tracht, Network, and Dirndl competition on Oktoberhub.',
+            ],
+            'tollwood_winter' => [
+                'name' => 'Tollwood Winter Festival',
+                'short' => 'Tollwood Winter',
+                'dates' => '24 Nov – 31 Dec 2027',
+                'blurb' => 'Winter lights, concerts, and organic market stalls on the Theresienwiese.',
+            ],
+            'christkindlmarkt' => [
+                'name' => 'Christkindlmarkt',
+                'short' => 'Christkindlmarkt',
+                'dates' => '22 Nov – 24 Dec 2027',
+                'blurb' => 'Munich Christmas markets from Marienplatz to the residences — Glühwein, gifts, and winter nights.',
+            ],
+        ],
     ],
 
     'shorts' => [

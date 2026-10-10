@@ -7,6 +7,9 @@
                 [
                     'title' => __('platform.nav.groups.tents_events'),
                     'links' => [
+                        ['href' => url('/festivals'), 'label' => __('platform.nav.festivals'), 'desc' => __('platform.nav.festivals_desc')],
+                        ['href' => url('/festivals/oktoberfest'), 'label' => 'Oktoberfest 2027'],
+                        ['href' => url('/festivals/fruehlingsfest'), 'label' => 'Frühlingsfest'],
                         ['href' => url('/events'), 'label' => __('platform.nav.beer_tents')],
                         ['href' => url('/events/calendar'), 'label' => __('platform.nav.event_calendar')],
                         ['href' => url('/parties'), 'label' => __('platform.nav.parties')],
@@ -73,7 +76,7 @@
         ],
     ];
     $quick = [
-        ['href' => url('/events'), 'label' => __('platform.nav.beer_tents')],
+        ['href' => url('/festivals'), 'label' => __('platform.nav.festivals')],
         ['href' => url('/hotels'), 'label' => __('platform.nav.hotels')],
         ['href' => url('/rentals'), 'label' => __('platform.nav.tracht_short')],
         ['href' => url('/competition'), 'label' => __('platform.nav.competition')],
@@ -82,7 +85,7 @@
 @endphp
 
 <header
-    class="sticky top-0 z-50 border-b border-bavarian-800 bg-bavarian-900"
+    class="sticky top-0 z-[110] border-b border-bavarian-800 bg-bavarian-900"
     x-data="{
         mobileOpen: false,
         openMenu: null,
@@ -92,6 +95,10 @@
         openDesktop(id) { this.openMenu = id; },
         closeDesktop() { this.openMenu = null; }
     }"
+    x-effect="
+        document.documentElement.classList.toggle('mobile-nav-open', mobileOpen);
+        document.body.classList.toggle('overflow-hidden', mobileOpen);
+    "
     @keydown.escape.window="close()"
 >
     <div class="relative mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
@@ -195,10 +202,10 @@
         aria-modal="true"
         aria-label="{{ __('platform.nav.main') }}"
     >
-        <div class="absolute inset-0 bg-bavarian-950/70" @click="close()"></div>
+        <div class="absolute inset-0 bg-beer/80" @click="close()"></div>
 
         <div
-            class="absolute inset-x-0 bottom-0 top-[3.6rem] flex flex-col overflow-hidden border-t border-gold-400/20 bg-bavarian-900"
+            class="absolute inset-x-0 bottom-0 top-[3.75rem] flex flex-col overflow-hidden border-t border-gold-400/20 bg-bavarian-900 shadow-2xl"
             x-show="mobileOpen"
             x-transition:enter="transition transform ease-out duration-200"
             x-transition:enter-start="translate-y-4 opacity-0"

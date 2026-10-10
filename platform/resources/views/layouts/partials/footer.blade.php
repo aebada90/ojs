@@ -17,6 +17,7 @@
                     <li><a href="#hotels" class="transition hover:text-gold-300">{{ __('platform.nav.hotels') }}</a></li>
                     <li><a href="#rentals" class="transition hover:text-gold-300">{{ __('platform.nav.rentals') }}</a></li>
                     <li><a href="#marketplace" class="transition hover:text-gold-300">{{ __('platform.nav.marketplace') }}</a></li>
+                    <li><a href="{{ url('/festivals') }}" class="transition hover:text-gold-300">{{ __('platform.nav.festivals') }}</a></li>
                     <li><a href="#events" class="transition hover:text-gold-300">{{ __('platform.nav.events') }}</a></li>
                     <li><a href="{{ url('/competition') }}" class="transition hover:text-gold-300">{{ __('platform.nav.competition') }}</a></li>
                     <li><a href="{{ url('/network') }}" class="transition hover:text-gold-300">{{ __('platform.nav.network') }}</a></li>

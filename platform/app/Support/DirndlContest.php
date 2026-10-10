@@ -17,7 +17,7 @@ class DirndlContest
 
     public static function year(): int
     {
-        return 2026;
+        return 2027;
     }
 
     /** @return array<int, array<string, mixed>> */
@@ -50,7 +50,7 @@ class DirndlContest
                 'city' => 'Salzburg',
                 'age' => 24,
                 'dirndl' => 'Forest green with floral embroidery',
-                'bio' => 'First Wiesn in a grandmother’s dirndl, restyled for 2026. Always smiling in Schottenhamel.',
+                'bio' => 'First Wiesn in a grandmother’s dirndl, restyled for 2027. Always smiling in Schottenhamel.',
                 'photo' => 'https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?auto=compress&cs=tinysrgb&w=900&h=1100&fit=crop',
                 'seed_votes' => 121,
             ],

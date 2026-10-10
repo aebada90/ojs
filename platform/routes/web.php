@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CompetitionController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FestivalController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\MatchmakingController;
@@ -17,6 +18,9 @@ Route::get('/locale/{locale}', [LocaleController::class, 'switch'])->name('local
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/dashboard', DashboardController::class)->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/festivals', [FestivalController::class, 'index'])->name('festivals.index');
+Route::get('/festivals/{slug}', [FestivalController::class, 'show'])->name('festivals.show');
+Route::redirect('/munich-festivals', '/festivals', 301);
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('/robots.txt', [RobotsController::class, 'index'])->name('robots');
 

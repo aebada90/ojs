@@ -132,3 +132,12 @@
 .countdown-label {
     @apply mt-1.5 block text-[10px] font-bold uppercase tracking-[0.14em] text-white/80 sm:text-[11px];
 }
+
+html.mobile-nav-open .news-marquee {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+html.mobile-nav-open {
+    overflow: hidden;
+}

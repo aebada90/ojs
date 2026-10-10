@@ -1,8 +1,8 @@
 <?php
 
 return [
-  'name' => env('PLATFORM_NAME', 'Oktoberfest AI'),
-  'tagline' => env('PLATFORM_TAGLINE', 'The Ultimate AI-Powered Tourism & Festival Ecosystem'),
+  'name' => env('PLATFORM_NAME', 'Oktoberhub'),
+  'tagline' => env('PLATFORM_TAGLINE', 'Munich Festivals 2027 — hotels, tents, markets, and AI trip planning'),
   'default_locale' => env('PLATFORM_DEFAULT_LOCALE', 'en'),
   'default_currency' => env('PLATFORM_DEFAULT_CURRENCY', 'EUR'),
   'default_timezone' => env('PLATFORM_DEFAULT_TIMEZONE', 'Europe/Berlin'),
@@ -17,8 +17,8 @@ return [
   // When true, always show an on-page verify button (useful until Hostinger SMTP works).
   'verify_inline_fallback' => (bool) env('VERIFY_EMAIL_INLINE', true),
   'seo' => [
-    'title_suffix' => ' | '.env('PLATFORM_NAME', 'Oktoberfest AI'),
-    'default_description' => 'Discover, book, buy, sell, and rent — hotels, events, experiences, marketplace, and more. Powered by AI.',
+    'title_suffix' => ' | '.env('PLATFORM_NAME', 'Oktoberhub'),
+    'default_description' => 'Munich Festivals 2027 — Oktoberfest, Frühlingsfest, Starkbierfest, Tollwood, Auer Dult, and Christkindlmarkt. Hotels, Tracht, tickets, and AI trip planning.',
     'twitter_handle' => env('PLATFORM_TWITTER', '@oktoberfestai'),
   ],
   'hosting' => [

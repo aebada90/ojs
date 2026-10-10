@@ -1,23 +1,25 @@
 <?php
 
 return [
-    'name' => 'Oktoberfest AI',
-    'tagline' => 'Das ultimative KI-gestützte Tourismus- & Festival-Ökosystem',
-    'tagline_short' => 'KI-Tourismus & Festival OS',
+    'name' => 'Oktoberhub',
+    'tagline' => 'Münchner Festivals 2027 — Hotels, Zelte, Märkte und KI-Reiseplanung',
+    'tagline_short' => 'München Festival OS 2027',
 
     'nav' => [
         'main' => 'Hauptmenü',
         'menu' => 'Menü öffnen',
         'hotels' => 'Hotels',
-        'hotels_near' => 'Hotels nahe Wiesn',
+        'hotels_near' => 'Hotels an der Theresienwiese',
         'apartments' => 'Apartments & Wohnungen',
         'rentals' => 'Vermietung',
         'tracht' => 'Tracht & Verleih',
         'tracht_short' => 'Tracht',
         'marketplace' => 'Bayrischer Shop',
         'events' => 'Events',
+        'festivals' => 'Festivals 2027',
+        'festivals_desc' => 'Oktoberfest, Frühlingsfest, Starkbierfest, Tollwood & Christkindlmärkte',
         'beer_tents' => 'Bierzelte',
-        'event_calendar' => 'Eventkalender',
+        'event_calendar' => 'Festival-Kalender',
         'parties' => 'Partys',
         'nightlife' => 'Nachtleben',
         'restaurants' => 'Restaurants',
@@ -147,11 +149,11 @@ return [
     ],
 
     'competition' => [
-        'page_title' => 'Beste Dirndl 2026',
-        'page_subtitle' => 'Stimm online für die beste Frau im Dirndl auf dem Oktoberfest.',
+        'page_title' => 'Beste Dirndl 2027',
+        'page_subtitle' => 'Stimm online für die beste Frau im Dirndl auf dem Oktoberfest 2027.',
         'badge' => 'Wettbewerb',
         'title' => 'Beste Frau im Dirndl',
-        'subtitle' => 'Oktoberfest-Trachtenwettbewerb — entdecke die Kandidatinnen und stimme online ab. Eine Stimme pro Besucherin oder Besucher. Du kannst sie bis zum Ende der Wiesn ändern.',
+        'subtitle' => 'Oktoberfest-2027-Trachtenwettbewerb — entdecke die Kandidatinnen und stimme online ab. Eine Stimme pro Besucherin oder Besucher. Du kannst sie bis zum Ende der Wiesn ändern.',
         'cta_vote' => 'Jetzt abstimmen',
         'cta_enter' => 'Mitmachen',
         'votes_cast' => ':count Stimmen bisher',
@@ -262,24 +264,24 @@ return [
     ],
 
     'hero' => [
-        'badge' => 'Oktoberfest 2026 • München',
+        'badge' => 'Münchner Festivals 2027',
         'title' => 'Entdecken. Buchen. Feiern.',
-        'title_highlight' => 'Alles auf einer KI-Plattform.',
-        'subtitle' => 'Hotels, Vermietungen, Marktplatz, Events, Restaurants, Erlebnisse, Jobs und eine Live-Digital-Twin-Karte — KI-gestützt für die größten Festivals und Reiseziele der Welt.',
-        'cta_planner' => 'Reise mit KI planen',
-        'cta_explore' => 'Alles entdecken',
+        'title_highlight' => 'Jede Münchner Festivalsaison.',
+        'subtitle' => 'Oktoberfest, Frühlingsfest, Starkbierfest, Tollwood, Auer Dult und Christkindlmarkt — Hotels, Tracht, Tickets, Networking und KI-Reiseplanung für München 2027.',
+        'cta_planner' => 'Reise 2027 planen',
+        'cta_explore' => 'Festivals entdecken',
         'stats' => [
+            ['value' => '7', 'label' => 'Festivalsaisons'],
             ['value' => '500+', 'label' => 'Hotels'],
-            ['value' => '1.2k', 'label' => 'Anbieter'],
-            ['value' => '50k', 'label' => 'Events'],
+            ['value' => '2027', 'label' => 'Wiesn-Jahr'],
         ],
     ],
 
     'planner' => [
         'title' => 'KI-Reiseplaner',
-        'subtitle' => 'Personalisierte Reiserouten, Restaurant-Tipps und Festival-Empfehlungen in Sekunden.',
-        'placeholder' => 'Plane eine 3-tägige München-Reise mit Hotels und Biertouren...',
-        'empty' => 'Frag mich nach deiner Oktoberfest-Reise, Hotelempfehlungen oder den besten Bierzelten.',
+        'subtitle' => 'Plane Frühlingsfest, Oktoberfest 2027, Tollwood oder Christkindlmärkte in Sekunden.',
+        'placeholder' => 'Plane 4 Tage rund ums Oktoberfest 2027 mit Hotel an der Theresienwiese...',
+        'empty' => 'Frag mich nach Frühlingsfest, Oktoberfest 2027, Tollwood oder Christkindlmarkt — Hotels, Zelte und Märkte.',
         'send' => 'KI fragen',
     ],
 
@@ -325,8 +327,12 @@ return [
             'subtitle' => 'Profile in München entdecken und ein Gespräch starten.',
         ],
         'competition' => [
-            'title' => 'Beste Dirndl 2026',
-            'subtitle' => 'Stimm online für die beste Frau im Dirndl auf der Wiesn.',
+            'title' => 'Beste Dirndl 2027',
+            'subtitle' => 'Stimm online für die beste Frau im Dirndl auf dem Oktoberfest 2027.',
+        ],
+        'festivals' => [
+            'title' => 'Münchner Festivals 2027',
+            'subtitle' => 'Vom Starkbierfest bis zum Christkindlmarkt — ein Kalender fürs ganze Jahr.',
         ],
         'models' => [
             'title' => 'Empfohlene Models',
@@ -435,17 +441,90 @@ return [
     ],
 
     'news' => [
-        'aria' => 'Oktoberfest Nachrichten-Ticker',
-        'badge' => 'Wiesn News',
+        'aria' => 'Münchner Festival-Nachrichten',
+        'badge' => 'Festival News',
         'badge_short' => 'News',
     ],
 
     'countdown' => [
-        'label' => 'Countdown zum Oktoberfest 2026',
+        'label' => 'Countdown zum Oktoberfest 2027',
         'days' => 'Tage',
         'hours' => 'Std.',
         'minutes' => 'Min.',
         'seconds' => 'Sek.',
+    ],
+
+    'festivals' => [
+        'page_title' => 'Münchner Festivals :year',
+        'page_subtitle' => 'Oktoberfest, Frühlingsfest, Starkbierfest, Tollwood, Auer Dult und Christkindlmarkt — plane das ganze Münchner Jahr.',
+        'badge' => 'Saison :year',
+        'title' => 'Münchner Festivals :year',
+        'subtitle' => 'Ein Hub für jede große Münchner Festivalsaison — Übernachtung, Tracht, Leute treffen und vorher buchen.',
+        'cta_calendar' => 'Kalender 2027 öffnen',
+        'next_up' => 'Als Nächstes',
+        'stat_seasons' => 'Saisons',
+        'stat_festivals' => 'Festivals',
+        'stat_wiesn' => 'Oktoberfest',
+        'grid_title' => 'Festival-Kalender :year',
+        'grid_subtitle' => 'Tippe ein Festival für Hotels, Tracht und Meetups.',
+        'view' => 'Festival öffnen',
+        'countdown_title' => 'Oktoberfest :year beginnt',
+        'countdown_subtitle' => '18. September – 3. Oktober 2027 auf der Theresienwiese.',
+        'back' => 'Alle Münchner Festivals',
+        'cta_stay' => 'Hotels finden',
+        'cta_meet' => 'Leute treffen',
+        'more_title' => 'Weitere Münchner Festivals',
+        'seasons' => [
+            'spring' => 'Frühling',
+            'summer' => 'Sommer',
+            'autumn' => 'Herbst',
+            'winter' => 'Winter',
+            'year_round' => 'Ganzjährig',
+        ],
+        'items' => [
+            'starkbierfest' => [
+                'name' => 'Starkbierfest',
+                'short' => 'Starkbierfest',
+                'dates' => '12. Mär – 3. Apr 2027',
+                'blurb' => 'Starkbierzeit am Nockherberg und in Münchner Biergärten — der erste große Frühlingsauftakt.',
+            ],
+            'fruehlingsfest' => [
+                'name' => 'Frühlingsfest',
+                'short' => 'Frühlingsfest',
+                'dates' => '16. Apr – 2. Mai 2027',
+                'blurb' => 'Münchens Frühlingsfest auf der Theresienwiese — Fahrgeschäfte, Zelte und Tracht vor dem Oktoberfest.',
+            ],
+            'auer_dult' => [
+                'name' => 'Auer Dult',
+                'short' => 'Auer Dult',
+                'dates' => 'Drei Märkte 2027',
+                'blurb' => 'Volksfeste am Mariahilfplatz mit Geschirr, Antiquitäten und lokalen Spezialitäten.',
+            ],
+            'tollwood_summer' => [
+                'name' => 'Tollwood Sommerfestival',
+                'short' => 'Tollwood Sommer',
+                'dates' => '17. Jun – 18. Jul 2027',
+                'blurb' => 'Musik, Weltküche und Kultur in den Zelten im Olympiapark.',
+            ],
+            'oktoberfest' => [
+                'name' => 'Oktoberfest / Wiesn',
+                'short' => 'Oktoberfest',
+                'dates' => '18. Sep – 3. Okt 2027',
+                'blurb' => 'Das größte Volksfest der Welt — Zelte, Tracht, Network und Dirndl-Wettbewerb auf Oktoberhub.',
+            ],
+            'tollwood_winter' => [
+                'name' => 'Tollwood Winterfestival',
+                'short' => 'Tollwood Winter',
+                'dates' => '24. Nov – 31. Dez 2027',
+                'blurb' => 'Winterlichter, Konzerte und Bio-Marktstände auf der Theresienwiese.',
+            ],
+            'christkindlmarkt' => [
+                'name' => 'Christkindlmarkt',
+                'short' => 'Christkindlmarkt',
+                'dates' => '22. Nov – 24. Dez 2027',
+                'blurb' => 'Münchner Weihnachtsmärkte vom Marienplatz bis zur Residenz — Glühwein, Geschenke und Winternächte.',
+            ],
+        ],
     ],
 
     'shorts' => [

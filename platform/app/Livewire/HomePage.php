@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Listing;
 use App\Support\ConnectDemoProfiles;
 use App\Support\DirndlContest;
+use App\Support\MunichFestivals;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 use Modules\Marketplace\Models\Product;
@@ -29,6 +30,9 @@ class HomePage extends Component
             'featuredJobs' => $this->featured('job'),
             'networkPeople' => array_slice(ConnectDemoProfiles::publicProfiles(), 0, 4),
             'dirndlContestants' => array_slice(DirndlContest::contestants(), 0, 4),
+            'munichFestivals' => array_slice(MunichFestivals::all(), 0, 4),
+            'festivalYear' => MunichFestivals::seasonYear(),
+            'oktoberfestOpensAt' => MunichFestivals::oktoberfestOpensAt(),
         ]);
     }
 

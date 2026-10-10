@@ -133,3 +133,13 @@
         }
     </style>
 @endif
+
+<style>
+    html.mobile-nav-open .news-marquee {
+        visibility: hidden;
+        pointer-events: none;
+    }
+    html.mobile-nav-open {
+        overflow: hidden;
+    }
+</style>

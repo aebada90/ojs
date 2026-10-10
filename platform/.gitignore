@@ -1,0 +1,27 @@
+*.log
+.DS_Store
+.env
+.env.backup
+.env.production
+.ftp.env
+.phpactor.json
+.phpunit.result.cache
+/.fleet
+/.idea
+/.nova
+/.phpunit.cache
+/.vscode
+/.zed
+/auth.json
+/node_modules
+# Built assets committed for Hostinger shared hosting (no Node required on server)
+# /public/build
+/public/hot
+/public/storage
+/storage/*.key
+/storage/pail
+/vendor
+Homestead.json
+Homestead.yaml
+Thumbs.db
+.env.hostinger
